@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshConverter", "MeshExplorer\MeshConverter.csproj", "{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E29E78CD-A904-4AC3-BE59-28C5187A59B4}
+	EndGlobalSection
+EndGlobal

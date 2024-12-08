@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B0F6023D-A9E7-40C3-BF52-02BC2F9D9327}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MeshConverter</RootNamespace>
+    <AssemblyName>MeshConverter</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ModelThreeD.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MeshDecimator">
+      <HintPath>..\..\..\..\External\repos\MeshDecimator\MeshDecimatorTool\bin\Debug\MeshDecimator.dll</HintPath>
+    </Reference>
+    <Reference Include="MeshDecimatorTool">
+      <HintPath>..\..\..\..\External\repos\MeshDecimator\MeshDecimatorTool\bin\Debug\MeshDecimatorTool.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\BrowseButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BrowseButton.Designer.cs">
+      <DependentUpon>BrowseButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MeshBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MeshBrowser.Designer.cs">
+      <DependentUpon>MeshBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\MeshMetaData.cs" />
+    <Compile Include="Data\ObjFile.cs" />
+    <Compile Include="MeshConverterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MeshConverterForm.Designer.cs">
+      <DependentUpon>MeshConverterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\BrowseButton.resx">
+      <DependentUpon>BrowseButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MeshBrowser.resx">
+      <DependentUpon>MeshBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MeshConverterForm.resx">
+      <DependentUpon>MeshConverterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FolderClosedBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TreeView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AbstractCube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ModelThreeD.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ModelThreeD.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
