@@ -45,8 +45,11 @@ namespace MeshConverter
 					progressStatus.Maximum = status.MaxProgress;
 					progressStatus.Value = status.CurrentProgress;
 				}
-				labelStatusText.Visible = status.InProgress;
-				progressStatus.Visible = status.InProgress;
+				else
+				{
+					uiTimer.Stop();
+				}
+				tableStatus.Visible = status.InProgress;
 			}
 		}
 
@@ -97,6 +100,8 @@ namespace MeshConverter
 
 			public int MaxFilesPerFolder { get; set; } = -1;
 
+			public bool RandomlySelectFilesToCopy { get; set; } = false;
+
 			public float MaxTriangleCountOrRatio { get; set; } = -1;
 		}
 
@@ -108,6 +113,8 @@ namespace MeshConverter
 
 		private void btnMeshReductionGo_Click(object sender, EventArgs e)
 		{
+			btnCopy.Enabled = false;
+
 			CopyArgs copyArgs = new CopyArgs
 			{
 				Status = status,
@@ -121,7 +128,11 @@ namespace MeshConverter
 			int maxFilesPerFolder = -1;
 			float maxTriangleCount = -1;
 
-			if (checkLimitFilesPerFolder.Checked) { int.TryParse(textMaxFilesPerFolder.Text, out maxFilesPerFolder); }
+			if (checkLimitFilesPerFolder.Checked)
+			{
+				int.TryParse(textMaxFilesPerFolder.Text, out maxFilesPerFolder);
+				copyArgs.RandomlySelectFilesToCopy = checkRandomFiles.Checked;
+			}
 
 			if (checkMeshReduction.Checked)
 			{
@@ -147,13 +158,15 @@ namespace MeshConverter
 
 			copyArgs.Status.ResetAndStart();
 
+			HashSet<string> fromPaths = new HashSet<string>(copyArgs.FromPaths);
+
 			int totalCount = 0;
-			foreach (string f in copyArgs.FromPaths)
+			foreach (string f in fromPaths)
 			{
 				totalCount += CopyRecursive(f, copyArgs.ToFolder, copyArgs, CopyStage.Count);
 			}
 
-			foreach (string f in copyArgs.FromPaths)
+			foreach (string f in fromPaths)
 			{
 				totalCount += CopyRecursive(f, copyArgs.ToFolder, copyArgs, CopyStage.Copy);
 			}
@@ -162,13 +175,19 @@ namespace MeshConverter
 		private void CopyWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			browserRight.BrowseToPath(browserRight.CurrentPath, refresh: true);
-			uiTimer.Stop();
+			status.SetCompleted();
+			btnCopy.Enabled = true;
 		}
 
 
 		private static int CopyRecursive(string fromPath, string toFolder, CopyArgs copyArgs, CopyStage stage)
 		{
 			int count = 0;
+			if (copyArgs.Status.CancelRequested)
+			{
+				return count;
+			}
+
 			copyArgs.Status.Text = Path.GetFileName(fromPath);
 			if (stage == CopyStage.Count) { copyArgs.Status.MaxProgress++; }
 
@@ -180,7 +199,30 @@ namespace MeshConverter
 					Directory.CreateDirectory(newDirPath);
 				}
 				int filesCopied = 0;
-				foreach (string file in Directory.GetFiles(fromPath))
+
+				List<string> originalFiles = new List<string>(Directory.GetFiles(fromPath));
+				List<string> filesToCopy = new List<string>();
+				if (copyArgs.MaxFilesPerFolder <= 0)
+				{
+					filesToCopy = originalFiles;
+				}
+				else
+				{
+					Random rnd = new Random();
+
+					while (filesToCopy.Count < copyArgs.MaxFilesPerFolder && originalFiles.Count > 0)
+					{
+						int i = copyArgs.RandomlySelectFilesToCopy
+							? rnd.Next(originalFiles.Count - 1)
+							: 0;
+						filesToCopy.Add(originalFiles[i]);
+						originalFiles.RemoveAt(i);
+					}
+				}
+
+				filesToCopy.Sort();
+
+				foreach (string file in filesToCopy)
 				{
 					count += CopyRecursive(file, newDirPath, copyArgs, stage: stage);
 					if (++filesCopied >= copyArgs.MaxFilesPerFolder) { break; }
@@ -232,9 +274,13 @@ namespace MeshConverter
 		private void checkLimitFilesPerFolder_CheckedChanged(object sender, EventArgs e)
 		{
 			labelMaxPerFolder.Visible = textMaxFilesPerFolder.Visible = checkLimitFilesPerFolder.Checked;
+			checkRandomFiles.Visible = checkLimitFilesPerFolder.Checked;
 		}
 
-
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			status.Cancel();
+		}
 	}
 }
 
