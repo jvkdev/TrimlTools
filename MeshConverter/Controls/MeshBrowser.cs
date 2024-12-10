@@ -12,266 +12,313 @@ using System.Windows.Forms;
 
 namespace MeshConverter.Controls
 {
-    public partial class MeshBrowser : UserControl
-    {
-        public string CurrentPath { get; private set; }
+	public partial class MeshBrowser : UserControl
+	{
+		public string CurrentPath { get; private set; }
 
-        public string[] SelectedFilePaths { get; private set; }
+		public string[] SelectedFilePaths { get; private set; }
 
 
-        public int MinSelectedTriangleCount { get; private set; } = 0;
+		public int MinFolderTriangleCount { get; private set; } = 0;
 
+		public int MinSelectedTriangleCount { get; private set; } = 0;
 
-        public MeshBrowser()
-        {
-            InitializeComponent();
 
-            gridMeshes.AutoGenerateColumns = false;
-        }
 
+		public MeshBrowser()
+		{
+			InitializeComponent();
 
-        public event EventHandler SelectionChanged;
+			gridMeshes.AutoGenerateColumns = false;
 
+			//gridMeshes.ColumnStateChanged += GridMeshes_ColumnStateChanged;
+		}
 
+		//private void GridMeshes_ColumnStateChanged(object sender, DataGridViewColumnStateChangedEventArgs e)
+		//{
+		//	DataGridView dataGridView = (DataGridView)sender;
+		//	//Only update for full row selection mode.
+		//	if (dataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
+		//	{
+		//		e.Column.HeaderCell.Style.SelectionBackColor = dataGridView.ColumnHeadersDefaultCellStyle.BackColor;
+		//	}
+		//}
 
-        private void MeshBrowser_Load(object sender, EventArgs e)
-        {
-            if (!String.IsNullOrEmpty(textPath.Text))
-            {
-                BrowseToPath(textPath.Text, refresh: true);
-            }
-        }
+		public event EventHandler SelectionChanged;
 
 
-        private void textPath_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                BrowseToPath(textPath.Text, refresh: true);
-            }
-        }
 
+		private void MeshBrowser_Load(object sender, EventArgs e)
+		{
+			if (!String.IsNullOrEmpty(textPath.Text))
+			{
+				BrowseToPath(textPath.Text, refresh: true);
+			}
+		}
 
-        public void BrowseToPath(string path, bool refresh = false)
-        {
-            if (CurrentPath == path && !refresh) { return; }
 
-            if (textPath.Text != path)
-            {
-                textPath.Text = path;
-            }
+		private void textPath_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				BrowseToPath(textPath.Text, refresh: true);
+			}
+		}
 
-            CurrentPath = path;
 
-            LoadBrowseButtons(path);
+		public void BrowseToPath(string path, bool refresh = false)
+		{
+			if (CurrentPath == path && !refresh) { return; }
 
-            LoadMeshes(path);
-        }
+			if (textPath.Text != path)
+			{
+				textPath.Text = path;
+			}
 
+			if (Directory.Exists(path))
+			{
 
+				CurrentPath = path;
 
-        private void LoadBrowseButtons(string path)
-        {
-            foreach (Control c in flowFolders.Controls)
-            {
-                if (c is BrowseButton br)
-                {
-                    br.Click -= BrowseButton_Click;
-                }
-            }
-            flowFolders.Controls.Clear();
+				LoadBrowseButtons(path);
 
-            //BrowseButton browseUp = new BrowseButton(Path.GetDirectoryName(path));
-            //browseUp.Text = "..";
-            //browseUp.Click += BrowseButton_Click;
-            //flowFolders.Controls.Add(browseUp);
+				LoadMeshes(path);
+			}
+		}
 
-            string[] dirs = Directory.GetDirectories(path);
-            foreach (string dir in dirs)
-            {
-                BrowseButton browseButton = new BrowseButton(dir);
-                browseButton.Click += BrowseButton_Click;
-                flowFolders.Controls.Add(browseButton);
-            }
-            flowFolders.Controls.Add(textNewFolder);
-        }
 
-        private void BrowseButton_Click(object sender, EventArgs e)
-        {
-            if (sender is BrowseButton br)
-            {
-                BrowseToPath(br.Url);
-            }
-        }
 
+		private void LoadBrowseButtons(string path)
+		{
+			foreach (Control c in flowFolders.Controls)
+			{
+				if (c is BrowseButton br)
+				{
+					br.Click -= BrowseButton_Click;
+				}
+			}
+			flowFolders.Controls.Clear();
 
+			//BrowseButton browseUp = new BrowseButton(Path.GetDirectoryName(path));
+			//browseUp.Text = "..";
+			//browseUp.Click += BrowseButton_Click;
+			//flowFolders.Controls.Add(browseUp);
 
-        private void LoadMeshes(string path)
-        {
-            DataTable meshTable = new DataTable();
-            meshTable.Columns.Add("Icon", typeof(Image));
-            meshTable.Columns.Add("FilePath");
-            meshTable.Columns.Add("FileName");
-            meshTable.Columns.Add("Points", typeof(int));
-            meshTable.Columns.Add("Triangles", typeof(int));
+			string[] dirs = Directory.GetDirectories(path);
+			foreach (string dir in dirs)
+			{
+				BrowseButton browseButton = new BrowseButton(dir);
+				browseButton.Click += BrowseButton_Click;
+				flowFolders.Controls.Add(browseButton);
+			}
+			flowFolders.Controls.Add(textNewFolder);
+		}
 
-            string[] dirs = Directory.GetDirectories(path);
+		private void BrowseButton_Click(object sender, EventArgs e)
+		{
+			if (sender is BrowseButton br)
+			{
+				BrowseToPath(br.Url);
+			}
+		}
 
-            foreach (string dirPath in dirs)
-            {
-                DataRow row = meshTable.NewRow();
 
-                row["Icon"] = Properties.Resources.FolderClosedBlue;
-                row["FilePath"] = dirPath;
-                row["FileName"] = Path.GetFileName(dirPath);
 
-                meshTable.Rows.Add(row);
-            }
+		private void LoadMeshes(string path)
+		{
+			DataTable meshTable = new DataTable();
+			meshTable.Columns.Add("Icon", typeof(Image));
+			meshTable.Columns.Add("FilePath");
+			meshTable.Columns.Add("FileName");
+			meshTable.Columns.Add("Points", typeof(int));
+			meshTable.Columns.Add("Triangles", typeof(int));
 
+			string[] dirs = Directory.GetDirectories(path);
 
+			{
+				DataRow row = meshTable.NewRow();
 
-            string[] files = Directory.GetFiles(path, "*.obj");
+				row["Icon"] = Properties.Resources.FolderClosedBlue;
+				row["FilePath"] = Path.GetDirectoryName(path);
+				row["FileName"] = Path.GetFileName("..");
 
-            foreach (string filePath in files)
-            {
-                DataRow row = meshTable.NewRow();
+				meshTable.Rows.Add(row);
+			}
 
-                row["Icon"] = Properties.Resources.ModelThreeD;
-                row["FilePath"] = filePath;
-                row["FileName"] = Path.GetFileName(filePath);
+			foreach (string dirPath in dirs)
+			{
+				DataRow row = meshTable.NewRow();
 
-                meshTable.Rows.Add(row);
-            }
+				row["Icon"] = Properties.Resources.FolderClosedBlue;
+				row["FilePath"] = dirPath;
+				row["FileName"] = Path.GetFileName(dirPath);
 
-            gridMeshes.DataSource = meshTable;
+				meshTable.Rows.Add(row);
+			}
 
-            LoadMeshMetaDataAsync(meshTable);
-        }
 
 
-        private void LoadMeshMetaDataAsync(DataTable meshTable)
-        {
-            BackgroundWorker loadMeshMetaDataWorker = new BackgroundWorker();
-            loadMeshMetaDataWorker.DoWork += LoadMeshMetaDataWorker_DoWork;
-            loadMeshMetaDataWorker.RunWorkerAsync(new object[] { meshTable });
-        }
+			string[] files = Directory.GetFiles(path, "*.obj");
 
-        private void LoadMeshMetaDataWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            object[] args = e.Argument as object[];
-            DataTable meshTable = args[0] as DataTable;
+			foreach (string filePath in files)
+			{
+				DataRow row = meshTable.NewRow();
 
-            foreach (DataRow row in meshTable.Rows)
-            {
-                string filePath = row["FilePath"] as string;
+				row["Icon"] = Properties.Resources.ModelThreeD;
+				row["FilePath"] = filePath;
+				row["FileName"] = Path.GetFileName(filePath);
 
-                if (!String.IsNullOrEmpty(filePath) && File.Exists(filePath))
-                {
-                    string metaDataFilePath = filePath + ".meta";
+				meshTable.Rows.Add(row);
+			}
 
-                    MeshMetaData md = null;
-
-                    if (File.Exists(metaDataFilePath))
-                    {
-                        //md = XmlTools.Deserialize<MeshMetaData>(metaDataFilePath, "");
-                    }
-
-                    if (md == null)
-                    {
-                        md = new MeshMetaData();
-
-                        ObjFile objFile = ObjFile.Load(filePath);
-                        md.PointCount = objFile.VertexCount;
-                        md.TriangleCount = objFile.FaceCount;
-                    }
-
-                    row["Points"] = md.PointCount;
-                    row["Triangles"] = md.TriangleCount;
-                }
-            }
-        }
-
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.SelectedPath = textPath.Text;
-
-            dialog.ShowDialog();
-
-            BrowseToPath(dialog.SelectedPath);
-        }
-
-        private void browseUp_Click(object sender, EventArgs e)
-        {
-            BrowseToPath(Path.GetDirectoryName(CurrentPath));
-        }
-
-        private void textNewFolder_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                try
-                {
-                    string newFolderName = Path.Combine(CurrentPath, textNewFolder.Text);
-
-                    Directory.CreateDirectory(newFolderName);
-
-                    textNewFolder.Text = "";
-                    BrowseToPath(CurrentPath, refresh: true);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        private void gridMeshes_SelectionChanged(object sender, EventArgs e)
-        {
-            List<string> selectedFilePaths = new List<string>();
-
-            int minTriangle = int.MaxValue;
-
-            foreach (DataGridViewCell cell in gridMeshes.SelectedCells)
-            {
-                var gridRow = cell.OwningRow;
-                DataRow dataRow = (gridRow.DataBoundItem as DataRowView).Row;
-
-                if (dataRow != null)
-                {
-                    selectedFilePaths.Add((dataRow["FilePath"] ?? "").ToString());
-
-                    int triangles = (int)((dataRow["Triangles"] ?? 0) == DBNull.Value ? 0 : dataRow["Triangles"]);
-                    if (triangles < minTriangle) { minTriangle = triangles; }
-                }
-            }
-
-            this.SelectedFilePaths = selectedFilePaths.ToArray();
-            this.MinSelectedTriangleCount = minTriangle;
-
-            if (SelectionChanged != null)
-            {
-                SelectionChanged(this, new EventArgs());
-            }
-        }
-
-        private void gridMeshes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                var gridRow = gridMeshes.Rows[e.RowIndex];
-                DataRow dataRow = (gridRow.DataBoundItem as DataRowView).Row;
-
-                if (dataRow != null)
-                {
-                    string path = (dataRow["FilePath"] ?? "").ToString();
-
-                    if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
-                    {
-                        BrowseToPath(path);
-                    }
-                }
-            }
-        }
-    }
+			gridMeshes.DataSource = meshTable;
+
+			LoadMeshMetaDataAsync(meshTable);
+		}
+
+
+		private void LoadMeshMetaDataAsync(DataTable meshTable)
+		{
+			BackgroundWorker loadMeshMetaDataWorker = new BackgroundWorker();
+			loadMeshMetaDataWorker.DoWork += LoadMeshMetaDataWorker_DoWork;
+			loadMeshMetaDataWorker.RunWorkerCompleted += LoadMeshMetaDataWorker_RunWorkerCompleted;
+			loadMeshMetaDataWorker.RunWorkerAsync(new object[] { meshTable });
+		}
+
+		private void LoadMeshMetaDataWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			object[] args = e.Argument as object[];
+			DataTable meshTable = args[0] as DataTable;
+
+			foreach (DataRow row in meshTable.Rows)
+			{
+				string filePath = row["FilePath"] as string;
+
+				if (!String.IsNullOrEmpty(filePath) && File.Exists(filePath))
+				{
+					string metaDataFilePath = filePath + ".meta";
+
+					MeshMetaData md = null;
+
+					if (File.Exists(metaDataFilePath))
+					{
+						//md = XmlTools.Deserialize<MeshMetaData>(metaDataFilePath, "");
+					}
+
+					if (md == null)
+					{
+						md = new MeshMetaData();
+
+						ObjFile objFile = ObjFile.Load(filePath);
+						md.PointCount = objFile.VertexCount;
+						md.TriangleCount = objFile.FaceCount;
+					}
+
+					row["Points"] = md.PointCount;
+					row["Triangles"] = md.TriangleCount;
+				}
+			}
+
+			e.Result = args;
+		}
+
+		private void LoadMeshMetaDataWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			object[] result = e.Result as object[];
+			DataTable meshTable = result[0] as DataTable;
+
+			int minTriCount = int.MaxValue;
+			foreach (DataRow row in meshTable.Rows)
+			{
+				int triangles = (int)((row["Triangles"] ?? 0) == DBNull.Value ? 0 : row["Triangles"]);
+				minTriCount = Math.Min(minTriCount, triangles);
+			}
+
+			minTriCount = Math.Min(minTriCount, 10000);
+		}
+
+
+		private void btnBrowse_Click(object sender, EventArgs e)
+		{
+			FolderBrowserDialog dialog = new FolderBrowserDialog();
+			dialog.SelectedPath = textPath.Text;
+
+			dialog.ShowDialog();
+
+			BrowseToPath(dialog.SelectedPath);
+		}
+
+		private void browseUp_Click(object sender, EventArgs e)
+		{
+			BrowseToPath(Path.GetDirectoryName(CurrentPath));
+		}
+
+		private void textNewFolder_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				try
+				{
+					string newFolderName = Path.Combine(CurrentPath, textNewFolder.Text);
+
+					Directory.CreateDirectory(newFolderName);
+
+					textNewFolder.Text = "";
+					BrowseToPath(CurrentPath, refresh: true);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message);
+				}
+			}
+		}
+
+		private void gridMeshes_SelectionChanged(object sender, EventArgs e)
+		{
+			List<string> selectedFilePaths = new List<string>();
+
+			int minTriangle = int.MaxValue;
+
+			foreach (DataGridViewCell cell in gridMeshes.SelectedCells)
+			{
+				var gridRow = cell.OwningRow;
+				DataRow dataRow = (gridRow.DataBoundItem as DataRowView).Row;
+
+				if (dataRow != null)
+				{
+					selectedFilePaths.Add((dataRow["FilePath"] ?? "").ToString());
+
+					int triangles = (int)((dataRow["Triangles"] ?? 0) == DBNull.Value ? 0 : dataRow["Triangles"]);
+					if (triangles < minTriangle) { minTriangle = triangles; }
+				}
+			}
+
+			this.SelectedFilePaths = selectedFilePaths.ToArray();
+			this.MinSelectedTriangleCount = minTriangle;
+
+			if (SelectionChanged != null)
+			{
+				SelectionChanged(this, new EventArgs());
+			}
+		}
+
+		private void gridMeshes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex >= 0)
+			{
+				var gridRow = gridMeshes.Rows[e.RowIndex];
+				DataRow dataRow = (gridRow.DataBoundItem as DataRowView).Row;
+
+				if (dataRow != null)
+				{
+					string path = (dataRow["FilePath"] ?? "").ToString();
+
+					if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
+					{
+						BrowseToPath(path);
+					}
+				}
+			}
+		}
+	}
 }
