@@ -1,4 +1,5 @@
 ﻿using MeshConverter.Data;
+using MeshConverter.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -130,8 +131,9 @@ namespace MeshConverter.Controls
 			meshTable.Columns.Add("Icon", typeof(Image));
 			meshTable.Columns.Add("FilePath");
 			meshTable.Columns.Add("FileName");
-			meshTable.Columns.Add("Points", typeof(int));
-			meshTable.Columns.Add("Triangles", typeof(int));
+			meshTable.Columns.Add("FileSize");
+			meshTable.Columns.Add("VertexCount", typeof(int));
+			meshTable.Columns.Add("FaceCount", typeof(int));
 
 			string[] dirs = Directory.GetDirectories(path);
 
@@ -210,12 +212,19 @@ namespace MeshConverter.Controls
 						md = new MeshMetaData();
 
 						ObjFile objFile = ObjFile.Load(filePath);
-						md.PointCount = objFile.VertexCount;
-						md.TriangleCount = objFile.FaceCount;
+						Bitmap bmp = objFile.Preview(600, 600) as Bitmap;
+						bmp.Save(objFile.FilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
+
+						md.Preview = objFile.Preview(128, 128);
+						md.FileSize = objFile.FileSize;
+						md.VertexCount = objFile.VertexCount;
+						md.FaceCount = objFile.FaceCount;
 					}
 
-					row["Points"] = md.PointCount;
-					row["Triangles"] = md.TriangleCount;
+					row["Icon"] = md.Preview;
+					row["FileSize"] = md.FileSize.ToSizeString();
+					row["VertexCount"] = md.VertexCount;
+					row["FaceCount"] = md.FaceCount;
 				}
 			}
 
@@ -227,14 +236,14 @@ namespace MeshConverter.Controls
 			object[] result = e.Result as object[];
 			DataTable meshTable = result[0] as DataTable;
 
-			int minTriCount = int.MaxValue;
+			int minFaceCount = int.MaxValue;
 			foreach (DataRow row in meshTable.Rows)
 			{
-				int triangles = (int)((row["Triangles"] ?? 0) == DBNull.Value ? 0 : row["Triangles"]);
-				minTriCount = Math.Min(minTriCount, triangles);
+				int faceCount = (int)((row["FaceCount"] ?? 0) == DBNull.Value ? 0 : row["FaceCount"]);
+				minFaceCount = Math.Min(minFaceCount, faceCount);
 			}
 
-			minTriCount = Math.Min(minTriCount, 10000);
+			minFaceCount = Math.Min(minFaceCount, 10000);
 		}
 
 
@@ -288,7 +297,7 @@ namespace MeshConverter.Controls
 				{
 					selectedFilePaths.Add((dataRow["FilePath"] ?? "").ToString());
 
-					int triangles = (int)((dataRow["Triangles"] ?? 0) == DBNull.Value ? 0 : dataRow["Triangles"]);
+					int triangles = (int)((dataRow["FaceCount"] ?? 0) == DBNull.Value ? 0 : dataRow["FaceCount"]);
 					if (triangles < minTriangle) { minTriangle = triangles; }
 				}
 			}

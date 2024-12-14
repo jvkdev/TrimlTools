@@ -30,17 +30,20 @@
         {
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.gridMeshes = new System.Windows.Forms.DataGridView();
-			this.colIcon = new System.Windows.Forms.DataGridViewImageColumn();
-			this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colTriangleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tableFilePath = new System.Windows.Forms.TableLayoutPanel();
 			this.btnBrowse = new System.Windows.Forms.Button();
 			this.flowFolders = new System.Windows.Forms.FlowLayoutPanel();
 			this.textNewFolder = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textPath = new System.Windows.Forms.TextBox();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
 			this.browseUp = new MeshConverter.Controls.BrowseButton();
+			this.colIcon = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colFileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colTriangleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridMeshes)).BeginInit();
 			this.tableFilePath.SuspendLayout();
@@ -76,6 +79,7 @@
 			this.gridMeshes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIcon,
             this.colFileName,
+            this.colFileSize,
             this.colPoints,
             this.colTriangleCount});
 			this.gridMeshes.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -88,49 +92,12 @@
 			this.gridMeshes.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.gridMeshes.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.AliceBlue;
 			this.gridMeshes.RowTemplate.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
+			this.gridMeshes.RowTemplate.Height = 128;
 			this.gridMeshes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.gridMeshes.Size = new System.Drawing.Size(542, 437);
 			this.gridMeshes.TabIndex = 1;
 			this.gridMeshes.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridMeshes_CellDoubleClick);
 			this.gridMeshes.SelectionChanged += new System.EventHandler(this.gridMeshes_SelectionChanged);
-			// 
-			// colIcon
-			// 
-			this.colIcon.DataPropertyName = "Icon";
-			this.colIcon.HeaderText = "";
-			this.colIcon.MinimumWidth = 8;
-			this.colIcon.Name = "colIcon";
-			this.colIcon.ReadOnly = true;
-			this.colIcon.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.colIcon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.colIcon.Width = 25;
-			// 
-			// colFileName
-			// 
-			this.colFileName.DataPropertyName = "FileName";
-			this.colFileName.HeaderText = "Name";
-			this.colFileName.MinimumWidth = 8;
-			this.colFileName.Name = "colFileName";
-			this.colFileName.ReadOnly = true;
-			this.colFileName.Width = 150;
-			// 
-			// colPoints
-			// 
-			this.colPoints.DataPropertyName = "Points";
-			this.colPoints.HeaderText = "Points";
-			this.colPoints.MinimumWidth = 8;
-			this.colPoints.Name = "colPoints";
-			this.colPoints.ReadOnly = true;
-			this.colPoints.Width = 150;
-			// 
-			// colTriangleCount
-			// 
-			this.colTriangleCount.DataPropertyName = "Triangles";
-			this.colTriangleCount.HeaderText = "Triangles";
-			this.colTriangleCount.MinimumWidth = 8;
-			this.colTriangleCount.Name = "colTriangleCount";
-			this.colTriangleCount.ReadOnly = true;
-			this.colTriangleCount.Width = 150;
 			// 
 			// tableFilePath
 			// 
@@ -232,6 +199,49 @@
 			this.browseUp.UseVisualStyleBackColor = true;
 			this.browseUp.Click += new System.EventHandler(this.browseUp_Click);
 			// 
+			// colIcon
+			// 
+			this.colIcon.DataPropertyName = "Icon";
+			this.colIcon.HeaderText = "";
+			this.colIcon.MinimumWidth = 8;
+			this.colIcon.Name = "colIcon";
+			this.colIcon.ReadOnly = true;
+			this.colIcon.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.colIcon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.colIcon.Width = 128;
+			// 
+			// colFileName
+			// 
+			this.colFileName.DataPropertyName = "FileName";
+			this.colFileName.HeaderText = "Name";
+			this.colFileName.MinimumWidth = 8;
+			this.colFileName.Name = "colFileName";
+			this.colFileName.ReadOnly = true;
+			this.colFileName.Width = 150;
+			// 
+			// colFileSize
+			// 
+			this.colFileSize.DataPropertyName = "FileSize";
+			this.colFileSize.HeaderText = "File Size";
+			this.colFileSize.Name = "colFileSize";
+			this.colFileSize.ReadOnly = true;
+			// 
+			// colPoints
+			// 
+			this.colPoints.DataPropertyName = "VertexCount";
+			this.colPoints.HeaderText = "Vertices";
+			this.colPoints.MinimumWidth = 8;
+			this.colPoints.Name = "colPoints";
+			this.colPoints.ReadOnly = true;
+			// 
+			// colTriangleCount
+			// 
+			this.colTriangleCount.DataPropertyName = "FaceCount";
+			this.colTriangleCount.HeaderText = "Faces";
+			this.colTriangleCount.MinimumWidth = 8;
+			this.colTriangleCount.Name = "colTriangleCount";
+			this.colTriangleCount.ReadOnly = true;
+			// 
 			// MeshBrowser
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -265,9 +275,12 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox textPath;
         private System.Windows.Forms.TextBox textNewFolder;
-        private System.Windows.Forms.DataGridViewImageColumn colIcon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPoints;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colTriangleCount;
-    }
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog2;
+		private System.Windows.Forms.DataGridViewImageColumn colIcon;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colFileSize;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colPoints;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colTriangleCount;
+	}
 }
