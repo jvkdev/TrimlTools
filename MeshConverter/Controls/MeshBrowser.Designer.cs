@@ -36,10 +36,14 @@
 			this.textNewFolder = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textPath = new System.Windows.Forms.TextBox();
+			this.browseUp = new MeshConverter.Controls.BrowseButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
-			this.browseUp = new MeshConverter.Controls.BrowseButton();
+			this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
 			this.colIcon = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colPreviewFront = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colPreviewRight = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colPreviewTop = new System.Windows.Forms.DataGridViewImageColumn();
 			this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colFileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,6 +82,9 @@
 			this.gridMeshes.ColumnHeadersHeight = 24;
 			this.gridMeshes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIcon,
+            this.colPreviewFront,
+            this.colPreviewRight,
+            this.colPreviewTop,
             this.colFileName,
             this.colFileSize,
             this.colPoints,
@@ -202,13 +209,37 @@
 			// colIcon
 			// 
 			this.colIcon.DataPropertyName = "Icon";
-			this.colIcon.HeaderText = "";
+			this.colIcon.HeaderText = "Left";
 			this.colIcon.MinimumWidth = 8;
 			this.colIcon.Name = "colIcon";
 			this.colIcon.ReadOnly = true;
 			this.colIcon.Resizable = System.Windows.Forms.DataGridViewTriState.True;
 			this.colIcon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
 			this.colIcon.Width = 128;
+			// 
+			// colPreviewFront
+			// 
+			this.colPreviewFront.DataPropertyName = "PreviewFront";
+			this.colPreviewFront.HeaderText = "Front";
+			this.colPreviewFront.Name = "colPreviewFront";
+			this.colPreviewFront.ReadOnly = true;
+			this.colPreviewFront.Width = 128;
+			// 
+			// colPreviewRight
+			// 
+			this.colPreviewRight.DataPropertyName = "PreviewRight";
+			this.colPreviewRight.HeaderText = "Right";
+			this.colPreviewRight.Name = "colPreviewRight";
+			this.colPreviewRight.ReadOnly = true;
+			this.colPreviewRight.Width = 128;
+			// 
+			// colPreviewTop
+			// 
+			this.colPreviewTop.DataPropertyName = "PreviewTop";
+			this.colPreviewTop.HeaderText = "Top";
+			this.colPreviewTop.Name = "colPreviewTop";
+			this.colPreviewTop.ReadOnly = true;
+			this.colPreviewTop.Width = 128;
 			// 
 			// colFileName
 			// 
@@ -277,7 +308,11 @@
         private System.Windows.Forms.TextBox textNewFolder;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog2;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog3;
 		private System.Windows.Forms.DataGridViewImageColumn colIcon;
+		private System.Windows.Forms.DataGridViewImageColumn colPreviewFront;
+		private System.Windows.Forms.DataGridViewImageColumn colPreviewRight;
+		private System.Windows.Forms.DataGridViewImageColumn colPreviewTop;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFileSize;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colPoints;

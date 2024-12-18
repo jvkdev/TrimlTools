@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -129,6 +130,9 @@ namespace MeshConverter.Controls
 		{
 			DataTable meshTable = new DataTable();
 			meshTable.Columns.Add("Icon", typeof(Image));
+			meshTable.Columns.Add("PreviewFront", typeof(Image));
+			meshTable.Columns.Add("PreviewRight", typeof(Image));
+			meshTable.Columns.Add("PreviewTop", typeof(Image));
 			meshTable.Columns.Add("FilePath");
 			meshTable.Columns.Add("FileName");
 			meshTable.Columns.Add("FileSize");
@@ -141,6 +145,10 @@ namespace MeshConverter.Controls
 				DataRow row = meshTable.NewRow();
 
 				row["Icon"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewFront"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewRight"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewTop"] = Properties.Resources.FolderClosedBlue;
+
 				row["FilePath"] = Path.GetDirectoryName(path);
 				row["FileName"] = Path.GetFileName("..");
 
@@ -152,6 +160,10 @@ namespace MeshConverter.Controls
 				DataRow row = meshTable.NewRow();
 
 				row["Icon"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewFront"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewRight"] = Properties.Resources.FolderClosedBlue;
+				row["PreviewTop"] = Properties.Resources.FolderClosedBlue;
+
 				row["FilePath"] = dirPath;
 				row["FileName"] = Path.GetFileName(dirPath);
 
@@ -167,6 +179,10 @@ namespace MeshConverter.Controls
 				DataRow row = meshTable.NewRow();
 
 				row["Icon"] = Properties.Resources.ModelThreeD;
+				row["PreviewFront"] = Properties.Resources.ModelThreeD;
+				row["PreviewRight"] = Properties.Resources.ModelThreeD;
+				row["PreviewTop"] = Properties.Resources.ModelThreeD;
+
 				row["FilePath"] = filePath;
 				row["FileName"] = Path.GetFileName(filePath);
 
@@ -212,16 +228,24 @@ namespace MeshConverter.Controls
 						md = new MeshMetaData();
 
 						ObjFile objFile = ObjFile.Load(filePath);
-						Bitmap bmp = objFile.Preview(600, 600) as Bitmap;
-						bmp.Save(objFile.FilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
+						//Bitmap bmp = objFile.Preview(600, 600, ObjFile.PreviewDirection.Front) as Bitmap;
+						//bmp.Save(objFile.FilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
 
-						md.Preview = objFile.Preview(128, 128);
+						md.PreviewLeft = objFile.Preview(128, 128, ObjFile.PreviewDirection.Left);
+						md.PreviewFront = objFile.Preview(128, 128, ObjFile.PreviewDirection.Front);
+						md.PreviewRight = objFile.Preview(128, 128, ObjFile.PreviewDirection.Right);
+						md.PreviewTop = objFile.Preview(128, 128, ObjFile.PreviewDirection.Top);
+
 						md.FileSize = objFile.FileSize;
 						md.VertexCount = objFile.VertexCount;
 						md.FaceCount = objFile.FaceCount;
 					}
 
-					row["Icon"] = md.Preview;
+					row["Icon"] = md.PreviewLeft;
+					row["PreviewFront"] = md.PreviewFront;
+					row["PreviewRight"] = md.PreviewRight;
+					row["PreviewTop"] = md.PreviewTop;
+
 					row["FileSize"] = md.FileSize.ToSizeString();
 					row["VertexCount"] = md.VertexCount;
 					row["FaceCount"] = md.FaceCount;
@@ -322,9 +346,16 @@ namespace MeshConverter.Controls
 				{
 					string path = (dataRow["FilePath"] ?? "").ToString();
 
-					if (!String.IsNullOrEmpty(path) && Directory.Exists(path))
+					if (!String.IsNullOrEmpty(path))
 					{
-						BrowseToPath(path);
+						if (Directory.Exists(path))
+						{
+							BrowseToPath(path);
+						}
+						else if (File.Exists(path))
+						{
+							System.Diagnostics.Process.Start(path);
+						}
 					}
 				}
 			}

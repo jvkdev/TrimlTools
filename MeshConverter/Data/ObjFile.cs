@@ -115,8 +115,9 @@ namespace MeshConverter.Data
 			}
 		}
 
+		public enum PreviewDirection { Front, Left, Right, Top };
 
-		public Image Preview(int width, int height)
+		public Image Preview(int width, int height, PreviewDirection direction)
 		{
 			Bitmap bmp = new Bitmap(width, height);
 			Graphics g = Graphics.FromImage(bmp);
@@ -125,7 +126,7 @@ namespace MeshConverter.Data
 			int innerWidth = width - (border * 2);
 			int innerHeight = height - (border * 2);
 
-			g.Clear(Color.White);
+			g.Clear(Color.Transparent);
 
 			float minX = float.MaxValue, maxX = float.MinValue, minY = float.MaxValue, maxY = float.MinValue, minZ = float.MaxValue, maxZ = float.MinValue;
 			foreach (var v in Vertices)
@@ -143,71 +144,128 @@ namespace MeshConverter.Data
 			float lengthY = maxY - minY;
 			float lengthZ = maxZ - minZ;
 
-			float scaleX = innerWidth / lengthX;
-			float scaleY = innerHeight / lengthY;
+			float scale2dX = innerWidth / lengthX;
+			float scale2dY = innerHeight / lengthY;
+
+			switch (direction)
+			{
+				default:
+				case PreviewDirection.Front:
+					scale2dX = innerWidth / lengthX;
+					scale2dY = innerHeight / lengthY;
+					break;
+				case PreviewDirection.Left:
+					scale2dX = innerWidth / lengthZ;
+					scale2dY = innerHeight / lengthY;
+					break;
+				case PreviewDirection.Right:
+					scale2dX = innerWidth / lengthZ;
+					scale2dY = innerHeight / lengthY;
+					break;
+				case PreviewDirection.Top:
+					scale2dX = innerWidth / lengthX;
+					scale2dY = innerHeight / lengthZ;
+					break;
+			}
 
 			float offset3dX = 0;
 			float offset3dY = 0;
 			float offset3dZ = 0;
 
-			if (minX < 0) { offset3dX = minX * -1; }
-			if (minY < 0) { offset3dX = minY * -1; }
-			if (minZ < 0) { offset3dX = minZ * -1; }
+			if (minX != 0) { offset3dX = minX * -1; }
+			if (minY != 0) { offset3dY = minY * -1; }
+			if (minZ != 0) { offset3dZ = minZ * -1; }
 
-			float scale = Math.Min(scaleX, scaleY);
+			float scale = Math.Min(scale2dX, scale2dY);
 
 			int offset2dX = 0;
 			int offset2dY = 0;
 
-			bool zUp = true;
+			bool zUp = direction == PreviewDirection.Top;
 
 			float pixelLengthX = lengthX * scale;
 			float pixelLengthY = lengthY * scale;
 			float pixelLengthZ = lengthZ * scale;
 
-			offset2dX = (int)(innerWidth - pixelLengthX) / 2;
-			if (zUp)
+			switch (direction)
 			{
-				offset2dY = (int)(innerHeight - pixelLengthZ) / 2;
+				default:
+				case PreviewDirection.Front:
+					offset2dX = (int)(innerWidth - pixelLengthX) / 2;
+					offset2dY = (int)(innerHeight - pixelLengthY) / 2;
+					break;
+				case PreviewDirection.Left:
+					offset2dX = (int)(innerWidth - pixelLengthZ) / 2;
+					offset2dY = (int)(innerHeight - pixelLengthY) / 2;
+					break;
+				case PreviewDirection.Right:
+					offset2dX = (int)(innerWidth - pixelLengthZ) / 2;
+					offset2dY = (int)(innerHeight - pixelLengthY) / 2;
+					break;
+				case PreviewDirection.Top:
+					offset2dX = (int)(innerWidth - pixelLengthX) / 2;
+					offset2dY = (int)(innerHeight - pixelLengthZ) / 2;
+					break;
 			}
-			else
-			{
-				offset2dY = (int)(innerHeight - pixelLengthY) / 2;
-			}
-
-			//if (offset2dX > offset2dY) { offset2dY = 0; }
-			//else { offset2dX = 0; }
 
 			foreach (var f in FaceIndices)
 			{
 				GraphicsPath path = new GraphicsPath();
 				for (int i = 0; i < f.Count; i++)
 				{
-					int first = i;
-					int second = i + 1;
-					if (second >= f.Count) { second = 0; }
-
-					var v1 = Vertices[f[first] - 1];
-					var v2 = Vertices[f[second] - 1];
-
-					int x1 = border + offset2dX + (int)((offset3dX + v1.X) * scale);
-					int x2 = border + offset2dX + (int)((offset3dX + v2.X) * scale);
-
-					int y1 = 0;
-					int y2 = 0;
-
-					if (zUp)
+					try
 					{
-						y1 = border + innerHeight - offset2dY - (int)((offset3dZ + v1.Z) * scale);
-						y2 = border + innerHeight - offset2dY - (int)((offset3dZ + v2.Z) * scale);
-					}
-					else
-					{
-						y1 = border + innerHeight - offset2dY - (int)((offset3dY + v1.Y) * scale);
-						y2 = border + innerHeight - offset2dY - (int)((offset3dY + v2.Y) * scale);
-					}
+						int first = i;
+						int second = i + 1;
+						if (second >= f.Count) { second = 0; }
 
-					path.AddLine(new Point(x1, y1), new Point(x2, y2));
+						var v1 = Vertices[f[first] - 1];
+						var v2 = Vertices[f[second] - 1];
+
+						int x1 = 0;
+						int x2 = 0;
+						int y1 = 0;
+						int y2 = 0;
+
+						switch (direction)
+						{
+							default:
+							case PreviewDirection.Front:
+								x1 = border + offset2dX + (int)((offset3dX + v1.X) * scale);
+								x2 = border + offset2dX + (int)((offset3dX + v2.X) * scale);
+
+								y1 = border + innerHeight - offset2dY - (int)((offset3dY + v1.Y) * scale);
+								y2 = border + innerHeight - offset2dY - (int)((offset3dY + v2.Y) * scale);
+								break;
+							case PreviewDirection.Left:
+								x1 = border + offset2dX + (int)((offset3dZ + v1.Z) * scale);
+								x2 = border + offset2dX + (int)((offset3dZ + v2.Z) * scale);
+
+								y1 = border + innerHeight - offset2dY - (int)((offset3dY + v1.Y) * scale);
+								y2 = border + innerHeight - offset2dY - (int)((offset3dY + v2.Y) * scale);
+								break;
+							case PreviewDirection.Right:
+								x1 = border + innerHeight - offset2dX - (int)((offset3dZ + v1.Z) * scale);
+								x2 = border + innerHeight - offset2dX - (int)((offset3dZ + v2.Z) * scale);
+
+								y1 = border + innerHeight - offset2dY - (int)((offset3dY + v1.Y) * scale);
+								y2 = border + innerHeight - offset2dY - (int)((offset3dY + v2.Y) * scale);
+								break;
+							case PreviewDirection.Top:
+								x1 = border + offset2dX + (int)((offset3dX + v1.X) * scale);
+								x2 = border + offset2dX + (int)((offset3dX + v2.X) * scale);
+
+								y1 = border + innerHeight - offset2dY - (int)((offset3dZ + v1.Z) * scale);
+								y2 = border + innerHeight - offset2dY - (int)((offset3dZ + v2.Z) * scale);
+								break;
+						}
+
+						path.AddLine(new Point(x1, y1), new Point(x2, y2));
+					}
+					catch (Exception ex)
+					{
+
+					}
 				}
 
 				g.FillPath(Brushes.AliceBlue, path);
