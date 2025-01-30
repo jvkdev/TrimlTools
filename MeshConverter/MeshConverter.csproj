@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModelThreeD.ico" />
+    <None Include="Resources\FolderClosedBlue128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

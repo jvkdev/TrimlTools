@@ -47,16 +47,18 @@
 			this.checkIncludeSubFolders = new System.Windows.Forms.CheckBox();
 			this.checkMeshReduction = new System.Windows.Forms.CheckBox();
 			this.checkAddNameSuffix = new System.Windows.Forms.CheckBox();
+			this.checkRandomFiles = new System.Windows.Forms.CheckBox();
 			this.tableStatus = new System.Windows.Forms.TableLayoutPanel();
-			this.labelStatusText = new System.Windows.Forms.Label();
 			this.progressStatus = new System.Windows.Forms.ProgressBar();
+			this.labelStatusText = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.panelMain = new System.Windows.Forms.Panel();
 			this.panelBottom = new System.Windows.Forms.Panel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.checkRandomFiles = new System.Windows.Forms.CheckBox();
 			this.browserLeft = new MeshConverter.Controls.MeshBrowser();
 			this.browserRight = new MeshConverter.Controls.MeshBrowser();
+			this.radioCopy = new System.Windows.Forms.RadioButton();
+			this.radioMove = new System.Windows.Forms.RadioButton();
 			this.panelTop.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitLeftRight)).BeginInit();
 			this.splitLeftRight.Panel1.SuspendLayout();
@@ -92,18 +94,18 @@
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.btnCopy, 2);
 			this.btnCopy.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnCopy.Location = new System.Drawing.Point(3, 3);
+			this.btnCopy.Location = new System.Drawing.Point(3, 53);
 			this.btnCopy.Name = "btnCopy";
 			this.btnCopy.Size = new System.Drawing.Size(180, 46);
 			this.btnCopy.TabIndex = 4;
 			this.btnCopy.Text = "Copy >";
 			this.btnCopy.UseVisualStyleBackColor = true;
-			this.btnCopy.Click += new System.EventHandler(this.btnMeshReductionGo_Click);
+			this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
 			// 
 			// textNameSuffix
 			// 
 			this.textNameSuffix.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textNameSuffix.Location = new System.Drawing.Point(96, 80);
+			this.textNameSuffix.Location = new System.Drawing.Point(96, 130);
 			this.textNameSuffix.Name = "textNameSuffix";
 			this.textNameSuffix.Size = new System.Drawing.Size(87, 23);
 			this.textNameSuffix.TabIndex = 3;
@@ -113,7 +115,7 @@
 			// textReductionTargetTriangle
 			// 
 			this.textReductionTargetTriangle.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textReductionTargetTriangle.Location = new System.Drawing.Point(96, 134);
+			this.textReductionTargetTriangle.Location = new System.Drawing.Point(96, 184);
 			this.textReductionTargetTriangle.Name = "textReductionTargetTriangle";
 			this.textReductionTargetTriangle.Size = new System.Drawing.Size(87, 23);
 			this.textReductionTargetTriangle.TabIndex = 2;
@@ -124,7 +126,7 @@
 			// 
 			this.labelNameSuffix.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.labelNameSuffix.AutoSize = true;
-			this.labelNameSuffix.Location = new System.Drawing.Point(3, 81);
+			this.labelNameSuffix.Location = new System.Drawing.Point(3, 131);
 			this.labelNameSuffix.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
 			this.labelNameSuffix.Name = "labelNameSuffix";
 			this.labelNameSuffix.Size = new System.Drawing.Size(72, 15);
@@ -137,7 +139,7 @@
 			// 
 			this.labelTriangles.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelTriangles.AutoSize = true;
-			this.labelTriangles.Location = new System.Drawing.Point(3, 138);
+			this.labelTriangles.Location = new System.Drawing.Point(3, 188);
 			this.labelTriangles.Name = "labelTriangles";
 			this.labelTriangles.Size = new System.Drawing.Size(53, 15);
 			this.labelTriangles.TabIndex = 0;
@@ -202,22 +204,25 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.textMaxFilesPerFolder, 1, 9);
-			this.tableLayoutPanel1.Controls.Add(this.labelMaxPerFolder, 0, 9);
-			this.tableLayoutPanel1.Controls.Add(this.checkLimitFilesPerFolder, 0, 8);
-			this.tableLayoutPanel1.Controls.Add(this.checkIncludeSubFolders, 0, 7);
-			this.tableLayoutPanel1.Controls.Add(this.btnCopy, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.labelNameSuffix, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.textNameSuffix, 1, 4);
-			this.tableLayoutPanel1.Controls.Add(this.labelTriangles, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.checkMeshReduction, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.textReductionTargetTriangle, 1, 6);
-			this.tableLayoutPanel1.Controls.Add(this.checkAddNameSuffix, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.checkRandomFiles, 0, 10);
+			this.tableLayoutPanel1.Controls.Add(this.radioMove, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.textMaxFilesPerFolder, 1, 10);
+			this.tableLayoutPanel1.Controls.Add(this.labelMaxPerFolder, 0, 10);
+			this.tableLayoutPanel1.Controls.Add(this.checkLimitFilesPerFolder, 0, 9);
+			this.tableLayoutPanel1.Controls.Add(this.checkIncludeSubFolders, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.btnCopy, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.labelNameSuffix, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.textNameSuffix, 1, 5);
+			this.tableLayoutPanel1.Controls.Add(this.labelTriangles, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.checkMeshReduction, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.textReductionTargetTriangle, 1, 7);
+			this.tableLayoutPanel1.Controls.Add(this.checkAddNameSuffix, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.checkRandomFiles, 0, 11);
+			this.tableLayoutPanel1.Controls.Add(this.radioCopy, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(7, 257);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 12;
+			this.tableLayoutPanel1.RowCount = 13;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -230,13 +235,13 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(186, 324);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(186, 362);
 			this.tableLayoutPanel1.TabIndex = 4;
 			// 
 			// textMaxFilesPerFolder
 			// 
 			this.textMaxFilesPerFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textMaxFilesPerFolder.Location = new System.Drawing.Point(96, 213);
+			this.textMaxFilesPerFolder.Location = new System.Drawing.Point(96, 263);
 			this.textMaxFilesPerFolder.Name = "textMaxFilesPerFolder";
 			this.textMaxFilesPerFolder.Size = new System.Drawing.Size(87, 23);
 			this.textMaxFilesPerFolder.TabIndex = 9;
@@ -247,7 +252,7 @@
 			// 
 			this.labelMaxPerFolder.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelMaxPerFolder.AutoSize = true;
-			this.labelMaxPerFolder.Location = new System.Drawing.Point(3, 217);
+			this.labelMaxPerFolder.Location = new System.Drawing.Point(3, 267);
 			this.labelMaxPerFolder.Name = "labelMaxPerFolder";
 			this.labelMaxPerFolder.Size = new System.Drawing.Size(86, 15);
 			this.labelMaxPerFolder.TabIndex = 8;
@@ -260,7 +265,7 @@
 			this.checkLimitFilesPerFolder.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkLimitFilesPerFolder.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.checkLimitFilesPerFolder, 2);
-			this.checkLimitFilesPerFolder.Location = new System.Drawing.Point(3, 188);
+			this.checkLimitFilesPerFolder.Location = new System.Drawing.Point(3, 238);
 			this.checkLimitFilesPerFolder.Name = "checkLimitFilesPerFolder";
 			this.checkLimitFilesPerFolder.Size = new System.Drawing.Size(135, 19);
 			this.checkLimitFilesPerFolder.TabIndex = 7;
@@ -274,7 +279,7 @@
 			this.checkIncludeSubFolders.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkIncludeSubFolders.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.checkIncludeSubFolders, 2);
-			this.checkIncludeSubFolders.Location = new System.Drawing.Point(3, 163);
+			this.checkIncludeSubFolders.Location = new System.Drawing.Point(3, 213);
 			this.checkIncludeSubFolders.Name = "checkIncludeSubFolders";
 			this.checkIncludeSubFolders.Size = new System.Drawing.Size(124, 19);
 			this.checkIncludeSubFolders.TabIndex = 6;
@@ -286,7 +291,7 @@
 			this.checkMeshReduction.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkMeshReduction.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.checkMeshReduction, 2);
-			this.checkMeshReduction.Location = new System.Drawing.Point(3, 109);
+			this.checkMeshReduction.Location = new System.Drawing.Point(3, 159);
 			this.checkMeshReduction.Name = "checkMeshReduction";
 			this.checkMeshReduction.Size = new System.Drawing.Size(112, 19);
 			this.checkMeshReduction.TabIndex = 5;
@@ -299,13 +304,27 @@
 			this.checkAddNameSuffix.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkAddNameSuffix.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.checkAddNameSuffix, 2);
-			this.checkAddNameSuffix.Location = new System.Drawing.Point(3, 55);
+			this.checkAddNameSuffix.Location = new System.Drawing.Point(3, 105);
 			this.checkAddNameSuffix.Name = "checkAddNameSuffix";
 			this.checkAddNameSuffix.Size = new System.Drawing.Size(116, 19);
 			this.checkAddNameSuffix.TabIndex = 10;
 			this.checkAddNameSuffix.Text = "Add Name Suffix";
 			this.checkAddNameSuffix.UseVisualStyleBackColor = true;
 			this.checkAddNameSuffix.CheckedChanged += new System.EventHandler(this.checkAddNameSuffix_CheckedChanged);
+			// 
+			// checkRandomFiles
+			// 
+			this.checkRandomFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkRandomFiles.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.checkRandomFiles, 2);
+			this.checkRandomFiles.Location = new System.Drawing.Point(3, 295);
+			this.checkRandomFiles.Name = "checkRandomFiles";
+			this.checkRandomFiles.Size = new System.Drawing.Size(97, 19);
+			this.checkRandomFiles.TabIndex = 11;
+			this.checkRandomFiles.Text = "Random Files";
+			this.toolTip1.SetToolTip(this.checkRandomFiles, "Randomly select which files to copy");
+			this.checkRandomFiles.UseVisualStyleBackColor = true;
+			this.checkRandomFiles.Visible = false;
 			// 
 			// tableStatus
 			// 
@@ -326,6 +345,14 @@
 			this.tableStatus.TabIndex = 5;
 			this.tableStatus.Visible = false;
 			// 
+			// progressStatus
+			// 
+			this.progressStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.progressStatus.Location = new System.Drawing.Point(3, 27);
+			this.progressStatus.Name = "progressStatus";
+			this.progressStatus.Size = new System.Drawing.Size(111, 27);
+			this.progressStatus.TabIndex = 0;
+			// 
 			// labelStatusText
 			// 
 			this.labelStatusText.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -336,14 +363,6 @@
 			this.labelStatusText.Size = new System.Drawing.Size(16, 15);
 			this.labelStatusText.TabIndex = 11;
 			this.labelStatusText.Text = "...";
-			// 
-			// progressStatus
-			// 
-			this.progressStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.progressStatus.Location = new System.Drawing.Point(3, 27);
-			this.progressStatus.Name = "progressStatus";
-			this.progressStatus.Size = new System.Drawing.Size(111, 27);
-			this.progressStatus.TabIndex = 0;
 			// 
 			// btnCancel
 			// 
@@ -375,20 +394,6 @@
 			this.panelBottom.Size = new System.Drawing.Size(1142, 55);
 			this.panelBottom.TabIndex = 3;
 			// 
-			// checkRandomFiles
-			// 
-			this.checkRandomFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkRandomFiles.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.checkRandomFiles, 2);
-			this.checkRandomFiles.Location = new System.Drawing.Point(3, 245);
-			this.checkRandomFiles.Name = "checkRandomFiles";
-			this.checkRandomFiles.Size = new System.Drawing.Size(97, 19);
-			this.checkRandomFiles.TabIndex = 11;
-			this.checkRandomFiles.Text = "Random Files";
-			this.toolTip1.SetToolTip(this.checkRandomFiles, "Randomly select which files to copy");
-			this.checkRandomFiles.UseVisualStyleBackColor = true;
-			this.checkRandomFiles.Visible = false;
-			// 
 			// browserLeft
 			// 
 			this.browserLeft.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -406,6 +411,31 @@
 			this.browserRight.Name = "browserRight";
 			this.browserRight.Size = new System.Drawing.Size(439, 629);
 			this.browserRight.TabIndex = 0;
+			// 
+			// radioCopy
+			// 
+			this.radioCopy.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.radioCopy.AutoSize = true;
+			this.radioCopy.Checked = true;
+			this.radioCopy.Location = new System.Drawing.Point(3, 15);
+			this.radioCopy.Name = "radioCopy";
+			this.radioCopy.Size = new System.Drawing.Size(53, 19);
+			this.radioCopy.TabIndex = 12;
+			this.radioCopy.Text = "Copy";
+			this.radioCopy.UseVisualStyleBackColor = true;
+			this.radioCopy.CheckedChanged += new System.EventHandler(this.radioCopy_CheckedChanged);
+			// 
+			// radioMove
+			// 
+			this.radioMove.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.radioMove.AutoSize = true;
+			this.radioMove.Location = new System.Drawing.Point(96, 15);
+			this.radioMove.Name = "radioMove";
+			this.radioMove.Size = new System.Drawing.Size(55, 19);
+			this.radioMove.TabIndex = 13;
+			this.radioMove.Text = "Move";
+			this.radioMove.UseVisualStyleBackColor = true;
+			this.radioMove.CheckedChanged += new System.EventHandler(this.radioCopy_CheckedChanged);
 			// 
 			// MeshConverterForm
 			// 
@@ -470,6 +500,8 @@
 		private System.Windows.Forms.TableLayoutPanel tableStatus;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.CheckBox checkRandomFiles;
+		private System.Windows.Forms.RadioButton radioCopy;
+		private System.Windows.Forms.RadioButton radioMove;
 	}
 }
 

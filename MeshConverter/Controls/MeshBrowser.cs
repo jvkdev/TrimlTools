@@ -16,6 +16,10 @@ namespace MeshConverter.Controls
 {
 	public partial class MeshBrowser : UserControl
 	{
+		private Timer longClickTimer = new Timer();
+		private int lastMouseDownRow = -1;
+
+
 		public string CurrentPath { get; private set; }
 
 		public string[] SelectedFilePaths { get; private set; }
@@ -31,10 +35,15 @@ namespace MeshConverter.Controls
 		{
 			InitializeComponent();
 
+			longClickTimer.Interval = 200;
+			longClickTimer.Tick += LongClickTimer_Tick;
+
 			gridMeshes.AutoGenerateColumns = false;
 
 			//gridMeshes.ColumnStateChanged += GridMeshes_ColumnStateChanged;
 		}
+
+
 
 		//private void GridMeshes_ColumnStateChanged(object sender, DataGridViewColumnStateChangedEventArgs e)
 		//{
@@ -125,9 +134,18 @@ namespace MeshConverter.Controls
 		}
 
 
+		private static Bitmap emptyImage = null;
+
 
 		private void LoadMeshes(string path)
 		{
+			if (emptyImage == null)
+			{
+				emptyImage = new Bitmap(1, 1);
+				Graphics graphics = Graphics.FromImage(emptyImage);
+				graphics.Clear(Color.Transparent);
+			}
+
 			DataTable meshTable = new DataTable();
 			meshTable.Columns.Add("Icon", typeof(Image));
 			meshTable.Columns.Add("PreviewFront", typeof(Image));
@@ -144,10 +162,10 @@ namespace MeshConverter.Controls
 			{
 				DataRow row = meshTable.NewRow();
 
-				row["Icon"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewFront"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewRight"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewTop"] = Properties.Resources.FolderClosedBlue;
+				row["Icon"] = Properties.Resources.FolderClosedBlue128;
+				row["PreviewFront"] = emptyImage;
+				row["PreviewRight"] = emptyImage;
+				row["PreviewTop"] = emptyImage;
 
 				row["FilePath"] = Path.GetDirectoryName(path);
 				row["FileName"] = Path.GetFileName("..");
@@ -159,10 +177,10 @@ namespace MeshConverter.Controls
 			{
 				DataRow row = meshTable.NewRow();
 
-				row["Icon"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewFront"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewRight"] = Properties.Resources.FolderClosedBlue;
-				row["PreviewTop"] = Properties.Resources.FolderClosedBlue;
+				row["Icon"] = Properties.Resources.FolderClosedBlue128;
+				row["PreviewFront"] = emptyImage;
+				row["PreviewRight"] = emptyImage;
+				row["PreviewTop"] = emptyImage;
 
 				row["FilePath"] = dirPath;
 				row["FileName"] = Path.GetFileName(dirPath);
@@ -231,10 +249,17 @@ namespace MeshConverter.Controls
 						//Bitmap bmp = objFile.Preview(600, 600, ObjFile.PreviewDirection.Front) as Bitmap;
 						//bmp.Save(objFile.FilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
 
-						md.PreviewLeft = objFile.Preview(128, 128, ObjFile.PreviewDirection.Left);
-						md.PreviewFront = objFile.Preview(128, 128, ObjFile.PreviewDirection.Front);
-						md.PreviewRight = objFile.Preview(128, 128, ObjFile.PreviewDirection.Right);
-						md.PreviewTop = objFile.Preview(128, 128, ObjFile.PreviewDirection.Top);
+						if (objFile.FaceCount > 0)
+						{
+							md.PreviewLeft = objFile.Preview(128, 128, ObjFile.PreviewDirection.Left);
+							md.PreviewFront = objFile.Preview(128, 128, ObjFile.PreviewDirection.Front);
+							md.PreviewRight = objFile.Preview(128, 128, ObjFile.PreviewDirection.Right);
+							md.PreviewTop = objFile.Preview(128, 128, ObjFile.PreviewDirection.Top);
+						}
+						else
+						{
+							md.PreviewLeft = md.PreviewFront = md.PreviewRight = md.PreviewTop = Properties.Resources.ModelThreeD;
+						}
 
 						md.FileSize = objFile.FileSize;
 						md.VertexCount = objFile.VertexCount;
@@ -337,9 +362,14 @@ namespace MeshConverter.Controls
 
 		private void gridMeshes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.RowIndex >= 0)
+			RowClick(e.RowIndex, doubleClick: true);
+		}
+
+		private void RowClick(int rowIndex, bool doubleClick = false)
+		{
+			if (rowIndex >= 0 && rowIndex < gridMeshes.Rows.Count)
 			{
-				var gridRow = gridMeshes.Rows[e.RowIndex];
+				var gridRow = gridMeshes.Rows[rowIndex];
 				DataRow dataRow = (gridRow.DataBoundItem as DataRowView).Row;
 
 				if (dataRow != null)
@@ -352,13 +382,45 @@ namespace MeshConverter.Controls
 						{
 							BrowseToPath(path);
 						}
-						else if (File.Exists(path))
+						else if (File.Exists(path) && doubleClick)
 						{
 							System.Diagnostics.Process.Start(path);
 						}
 					}
 				}
 			}
+		}
+
+
+		private void gridMeshes_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			RowClick(lastMouseDownRow);
+		}
+
+
+		private void LongClickTimer_Tick(object sender, EventArgs e)
+		{
+			longClickTimer.Stop();
+
+			//RowClick(lastMouseDownRow);
+		}
+
+		private void gridMeshes_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			lastMouseDownRow = (int)e.RowIndex;
+			longClickTimer.Start();
+		}
+
+		private void gridMeshes_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+		{
+			longClickTimer.Stop();
+			lastMouseDownRow = -1;
+		}
+
+		private void gridMeshes_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			longClickTimer.Stop();
+			lastMouseDownRow = -1;
 		}
 	}
 }

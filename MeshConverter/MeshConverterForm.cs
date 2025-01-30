@@ -86,13 +86,15 @@ namespace MeshConverter
 
 		private StatusIndicator status = new StatusIndicator();
 
-		private class CopyArgs
+		private class MoveOrCopyArgs
 		{
 			public StatusIndicator Status { get; set; }
 
 			public string[] FromPaths { get; set; }
 
 			public string ToFolder { get; set; }
+
+			public bool Move { get; set; } = false;
 
 			public string NameSuffix { get; set; }
 
@@ -111,15 +113,16 @@ namespace MeshConverter
 			Copy
 		}
 
-		private void btnMeshReductionGo_Click(object sender, EventArgs e)
+		private void btnCopy_Click(object sender, EventArgs e)
 		{
 			btnCopy.Enabled = false;
 
-			CopyArgs copyArgs = new CopyArgs
+			MoveOrCopyArgs copyArgs = new MoveOrCopyArgs
 			{
 				Status = status,
 				FromPaths = browserLeft.SelectedFilePaths,
 				ToFolder = browserRight.CurrentPath,
+				Move = radioMove.Checked,
 				NameSuffix = checkAddNameSuffix.Checked ? textNameSuffix.Text : "",
 				IncludeSubFolders = checkIncludeSubFolders.Checked
 			};
@@ -154,42 +157,50 @@ namespace MeshConverter
 
 		private static void CopyWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			CopyArgs copyArgs = e.Argument as CopyArgs;
+			MoveOrCopyArgs args = e.Argument as MoveOrCopyArgs;
 
-			copyArgs.Status.ResetAndStart();
+			args.Status.ResetAndStart();
 
-			HashSet<string> fromPaths = new HashSet<string>(copyArgs.FromPaths);
+			HashSet<string> fromPaths = new HashSet<string>(args.FromPaths);
 
 			int totalCount = 0;
 			foreach (string f in fromPaths)
 			{
-				totalCount += CopyRecursive(f, copyArgs.ToFolder, copyArgs, CopyStage.Count);
+				totalCount += MoveOrCopyRecursive(f, args.ToFolder, args, CopyStage.Count);
 			}
 
 			foreach (string f in fromPaths)
 			{
-				totalCount += CopyRecursive(f, copyArgs.ToFolder, copyArgs, CopyStage.Copy);
+				totalCount += MoveOrCopyRecursive(f, args.ToFolder, args, CopyStage.Copy);
 			}
+
+			e.Result = args;
 		}
 
 		private void CopyWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+			MoveOrCopyArgs args = e.Result as MoveOrCopyArgs;
+
+			if (args.Move)
+			{
+				browserLeft.BrowseToPath(browserLeft.CurrentPath, refresh: true);
+			}
 			browserRight.BrowseToPath(browserRight.CurrentPath, refresh: true);
 			status.SetCompleted();
 			btnCopy.Enabled = true;
 		}
 
 
-		private static int CopyRecursive(string fromPath, string toFolder, CopyArgs copyArgs, CopyStage stage)
+		private static int MoveOrCopyRecursive(string fromPath, string toFolder, MoveOrCopyArgs args, CopyStage stage)
 		{
 			int count = 0;
-			if (copyArgs.Status.CancelRequested)
+			if (args.Status.CancelRequested)
 			{
 				return count;
 			}
 
-			copyArgs.Status.Text = Path.GetFileName(fromPath);
-			if (stage == CopyStage.Count) { copyArgs.Status.MaxProgress++; }
+			args.Status.Text = Path.GetFileName(fromPath);
+			if (stage == CopyStage.Count) { args.Status.MaxProgress++; }
 
 			if (Directory.Exists(fromPath))
 			{
@@ -202,7 +213,7 @@ namespace MeshConverter
 
 				List<string> originalFiles = new List<string>(Directory.GetFiles(fromPath));
 				List<string> filesToCopy = new List<string>();
-				if (copyArgs.MaxFilesPerFolder <= 0)
+				if (args.MaxFilesPerFolder <= 0)
 				{
 					filesToCopy = originalFiles;
 				}
@@ -210,9 +221,9 @@ namespace MeshConverter
 				{
 					Random rnd = new Random();
 
-					while (filesToCopy.Count < copyArgs.MaxFilesPerFolder && originalFiles.Count > 0)
+					while (filesToCopy.Count < args.MaxFilesPerFolder && originalFiles.Count > 0)
 					{
-						int i = copyArgs.RandomlySelectFilesToCopy
+						int i = args.RandomlySelectFilesToCopy
 							? rnd.Next(originalFiles.Count - 1)
 							: 0;
 						filesToCopy.Add(originalFiles[i]);
@@ -224,15 +235,15 @@ namespace MeshConverter
 
 				foreach (string file in filesToCopy)
 				{
-					count += CopyRecursive(file, newDirPath, copyArgs, stage: stage);
-					if (++filesCopied >= copyArgs.MaxFilesPerFolder) { break; }
+					count += MoveOrCopyRecursive(file, newDirPath, args, stage: stage);
+					if (++filesCopied >= args.MaxFilesPerFolder) { break; }
 				}
 
-				if (copyArgs.IncludeSubFolders)
+				if (args.IncludeSubFolders)
 				{
 					foreach (string dir in Directory.GetDirectories(fromPath))
 					{
-						count += CopyRecursive(dir, newDirPath, copyArgs, stage: stage);
+						count += MoveOrCopyRecursive(dir, newDirPath, args, stage: stage);
 					}
 				}
 
@@ -244,17 +255,40 @@ namespace MeshConverter
 				if (stage == CopyStage.Copy)
 				{
 					string newFilePath = Path.Combine(toFolder,
-						Path.GetFileNameWithoutExtension(fromPath) + copyArgs.NameSuffix + Path.GetExtension(fromPath));
+						Path.GetFileNameWithoutExtension(fromPath) + args.NameSuffix + Path.GetExtension(fromPath));
 
-					if (copyArgs.MaxTriangleCountOrRatio > 10)
+					if (!args.Move && args.MaxTriangleCountOrRatio > 10)
 					{
-						MeshDecimatorTool.Commands.ReduceObjMesh(fromPath, newFilePath, copyArgs.MaxTriangleCountOrRatio);
+						MeshDecimatorTool.Commands.ReduceObjMesh(fromPath, newFilePath, args.MaxTriangleCountOrRatio);
 					}
 					else if (!File.Exists(newFilePath) && stage == CopyStage.Copy)
 					{
-						File.Copy(fromPath, newFilePath);
+						int retriesLeft = 5;
+						while (retriesLeft-- > 0)
+						{
+							try
+							{
+								if (args.Move)
+								{
+									File.Move(fromPath, newFilePath);
+								}
+								else
+								{
+									File.Copy(fromPath, newFilePath);
+								}
+								break;
+							}
+							catch (Exception ex)
+							{
+								System.Threading.Thread.Sleep(100);
+								if (retriesLeft == 0)
+								{
+									throw ex;
+								}
+							}
+						}
 					}
-					copyArgs.Status.CurrentProgress++;
+					args.Status.CurrentProgress++;
 				}
 			}
 
@@ -280,6 +314,18 @@ namespace MeshConverter
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			status.Cancel();
+		}
+
+		private void radioCopy_CheckedChanged(object sender, EventArgs e)
+		{
+			bool move = radioMove.Checked;
+
+			checkAddNameSuffix.Visible = !move;
+			checkMeshReduction.Visible = !move;
+			checkIncludeSubFolders.Visible = !move;
+			checkLimitFilesPerFolder.Visible = !move;
+
+			btnCopy.Text = move ? "Move >" : "Copy >";
 		}
 	}
 }

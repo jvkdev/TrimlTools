@@ -88,9 +88,12 @@ namespace MeshConverter.Data
 										for (int i = 1; i < parts.Length; i++)
 										{
 											string[] faceDef = parts[i].Split('/');
-											if (faceDef.Length == 3)
+											if (faceDef.Length >= 1)
 											{
 												if (int.TryParse(faceDef[0], out int ind)) { indices.Add(ind); }
+											}
+											if (faceDef.Length == 3)
+											{
 												if (int.TryParse(faceDef[1], out int uv)) { uvIndices.Add(uv); }
 												if (int.TryParse(faceDef[2], out int norm)) { normalIndices.Add(norm); }
 											}
@@ -117,7 +120,7 @@ namespace MeshConverter.Data
 
 		public enum PreviewDirection { Front, Left, Right, Top };
 
-		public Image Preview(int width, int height, PreviewDirection direction)
+		public Image Preview(int width, int height, PreviewDirection direction, int maxFacesToRender=20000)
 		{
 			Bitmap bmp = new Bitmap(width, height);
 			Graphics g = Graphics.FromImage(bmp);
@@ -144,30 +147,6 @@ namespace MeshConverter.Data
 			float lengthY = maxY - minY;
 			float lengthZ = maxZ - minZ;
 
-			float scale2dX = innerWidth / lengthX;
-			float scale2dY = innerHeight / lengthY;
-
-			switch (direction)
-			{
-				default:
-				case PreviewDirection.Front:
-					scale2dX = innerWidth / lengthX;
-					scale2dY = innerHeight / lengthY;
-					break;
-				case PreviewDirection.Left:
-					scale2dX = innerWidth / lengthZ;
-					scale2dY = innerHeight / lengthY;
-					break;
-				case PreviewDirection.Right:
-					scale2dX = innerWidth / lengthZ;
-					scale2dY = innerHeight / lengthY;
-					break;
-				case PreviewDirection.Top:
-					scale2dX = innerWidth / lengthX;
-					scale2dY = innerHeight / lengthZ;
-					break;
-			}
-
 			float offset3dX = 0;
 			float offset3dY = 0;
 			float offset3dZ = 0;
@@ -176,12 +155,12 @@ namespace MeshConverter.Data
 			if (minY != 0) { offset3dY = minY * -1; }
 			if (minZ != 0) { offset3dZ = minZ * -1; }
 
-			float scale = Math.Min(scale2dX, scale2dY);
+			float scale = Math.Min(innerWidth, innerHeight) / Math.Max(Math.Max(lengthX, lengthY), lengthZ);
 
-			int offset2dX = 0;
-			int offset2dY = 0;
+			int offset2dX;
+			int offset2dY;
 
-			bool zUp = direction == PreviewDirection.Top;
+			bool zUp;
 
 			float pixelLengthX = lengthX * scale;
 			float pixelLengthY = lengthY * scale;
@@ -208,8 +187,11 @@ namespace MeshConverter.Data
 					break;
 			}
 
+			int faceCount = 0;
 			foreach (var f in FaceIndices)
 			{
+				if (++faceCount > maxFacesToRender) break;
+
 				GraphicsPath path = new GraphicsPath();
 				for (int i = 0; i < f.Count; i++)
 				{

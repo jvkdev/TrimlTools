@@ -83,6 +83,16 @@ namespace MeshConverter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FolderClosedBlue128 {
+            get {
+                object obj = ResourceManager.GetObject("FolderClosedBlue128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ModelThreeD {
             get {
                 object obj = ResourceManager.GetObject("ModelThreeD", resourceCulture);
