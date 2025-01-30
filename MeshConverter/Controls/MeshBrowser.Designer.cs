@@ -30,16 +30,6 @@
         {
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.gridMeshes = new System.Windows.Forms.DataGridView();
-			this.colIcon = new System.Windows.Forms.DataGridViewImageColumn();
-			this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colPreviewFront = new System.Windows.Forms.DataGridViewImageColumn();
-			this.colPreviewRight = new System.Windows.Forms.DataGridViewImageColumn();
-			this.colPreviewTop = new System.Windows.Forms.DataGridViewImageColumn();
-			this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colCategoryCertainty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colFileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.colTriangleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tableFilePath = new System.Windows.Forms.TableLayoutPanel();
 			this.btnBrowse = new System.Windows.Forms.Button();
 			this.flowFolders = new System.Windows.Forms.FlowLayoutPanel();
@@ -50,6 +40,13 @@
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
+			this.colIcon = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colFileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colCategoryCertainty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colFileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colTriangleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridMeshes)).BeginInit();
 			this.tableFilePath.SuspendLayout();
@@ -85,9 +82,8 @@
 			this.gridMeshes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIcon,
             this.colFileName,
-            this.colPreviewFront,
-            this.colPreviewRight,
-            this.colPreviewTop,
+            this.colCategory,
+            this.colCategoryCertainty,
             this.colFileSize,
             this.colPoints,
             this.colTriangleCount});
@@ -111,88 +107,7 @@
 			this.gridMeshes.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridMeshes_CellMouseDown);
 			this.gridMeshes.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridMeshes_CellMouseLeave);
 			this.gridMeshes.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridMeshes_CellMouseUp);
-			this.gridMeshes.SelectionChanged += new System.EventHandler(this.gridMeshes_SelectionChanged);
-			// 
-			// colIcon
-			// 
-			this.colIcon.DataPropertyName = "Icon";
-			this.colIcon.HeaderText = "";
-			this.colIcon.MinimumWidth = 8;
-			this.colIcon.Name = "colIcon";
-			this.colIcon.ReadOnly = true;
-			this.colIcon.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.colIcon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.colIcon.Width = 128;
-			// 
-			// colFileName
-			// 
-			this.colFileName.DataPropertyName = "FileName";
-			this.colFileName.HeaderText = "Name";
-			this.colFileName.MinimumWidth = 8;
-			this.colFileName.Name = "colFileName";
-			this.colFileName.ReadOnly = true;
-			this.colFileName.Width = 150;
-			// 
-			// colPreviewFront
-			// 
-			this.colPreviewFront.DataPropertyName = "PreviewFront";
-			this.colPreviewFront.HeaderText = "Front";
-			this.colPreviewFront.Name = "colPreviewFront";
-			this.colPreviewFront.ReadOnly = true;
-			this.colPreviewFront.Width = 128;
-			// 
-			// colPreviewRight
-			// 
-			this.colPreviewRight.DataPropertyName = "PreviewRight";
-			this.colPreviewRight.HeaderText = "Right";
-			this.colPreviewRight.Name = "colPreviewRight";
-			this.colPreviewRight.ReadOnly = true;
-			this.colPreviewRight.Width = 128;
-			// 
-			// colPreviewTop
-			// 
-			this.colPreviewTop.DataPropertyName = "PreviewTop";
-			this.colPreviewTop.HeaderText = "Top";
-			this.colPreviewTop.Name = "colPreviewTop";
-			this.colPreviewTop.ReadOnly = true;
-			this.colPreviewTop.Width = 128;
-			// 
-			// colCategory
-			// 
-			this.colCategory.DataPropertyName = "Category";
-			this.colCategory.HeaderText = "Category";
-			this.colCategory.Name = "colCategory";
-			this.colCategory.ReadOnly = true;
-			// 
-			// colCategoryCertainty
-			// 
-			this.colCategoryCertainty.DataPropertyName = "CategoryCertainty";
-			this.colCategoryCertainty.HeaderText = "Certainty";
-			this.colCategoryCertainty.Name = "colCategoryCertainty";
-			this.colCategoryCertainty.ReadOnly = true;
-			// 
-			// colFileSize
-			// 
-			this.colFileSize.DataPropertyName = "FileSize";
-			this.colFileSize.HeaderText = "File Size";
-			this.colFileSize.Name = "colFileSize";
-			this.colFileSize.ReadOnly = true;
-			// 
-			// colPoints
-			// 
-			this.colPoints.DataPropertyName = "VertexCount";
-			this.colPoints.HeaderText = "Vertices";
-			this.colPoints.MinimumWidth = 8;
-			this.colPoints.Name = "colPoints";
-			this.colPoints.ReadOnly = true;
-			// 
-			// colTriangleCount
-			// 
-			this.colTriangleCount.DataPropertyName = "FaceCount";
-			this.colTriangleCount.HeaderText = "Faces";
-			this.colTriangleCount.MinimumWidth = 8;
-			this.colTriangleCount.Name = "colTriangleCount";
-			this.colTriangleCount.ReadOnly = true;
+			this.gridMeshes.SelectionChanged += new System.EventHandler(this.GridMeshes_SelectionChanged);
 			// 
 			// tableFilePath
 			// 
@@ -230,7 +145,7 @@
 			this.btnBrowse.Text = "..";
 			this.btnBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnBrowse.UseVisualStyleBackColor = false;
-			this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+			this.btnBrowse.Click += new System.EventHandler(this.BtnBrowse_Click);
 			// 
 			// flowFolders
 			// 
@@ -253,7 +168,7 @@
 			this.textNewFolder.Name = "textNewFolder";
 			this.textNewFolder.Size = new System.Drawing.Size(133, 15);
 			this.textNewFolder.TabIndex = 0;
-			this.textNewFolder.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textNewFolder_KeyDown);
+			this.textNewFolder.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextNewFolder_KeyDown);
 			// 
 			// panel1
 			// 
@@ -274,7 +189,7 @@
 			this.textPath.Size = new System.Drawing.Size(438, 22);
 			this.textPath.TabIndex = 1;
 			this.textPath.Text = "C:\\Users\\gusla\\source\\repos\\external\\Manifold40";
-			this.textPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPath_KeyDown);
+			this.textPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextPath_KeyDown);
 			// 
 			// browseUp
 			// 
@@ -292,7 +207,64 @@
 			this.browseUp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.browseUp.Url = null;
 			this.browseUp.UseVisualStyleBackColor = true;
-			this.browseUp.Click += new System.EventHandler(this.browseUp_Click);
+			this.browseUp.Click += new System.EventHandler(this.BrowseUp_Click);
+			// 
+			// colIcon
+			// 
+			this.colIcon.DataPropertyName = "Icon";
+			this.colIcon.HeaderText = "";
+			this.colIcon.MinimumWidth = 8;
+			this.colIcon.Name = "colIcon";
+			this.colIcon.ReadOnly = true;
+			this.colIcon.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.colIcon.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.colIcon.Width = 128;
+			// 
+			// colFileName
+			// 
+			this.colFileName.DataPropertyName = "FileName";
+			this.colFileName.HeaderText = "Name";
+			this.colFileName.MinimumWidth = 8;
+			this.colFileName.Name = "colFileName";
+			this.colFileName.ReadOnly = true;
+			this.colFileName.Width = 150;
+			// 
+			// colCategory
+			// 
+			this.colCategory.DataPropertyName = "Category";
+			this.colCategory.HeaderText = "Category";
+			this.colCategory.Name = "colCategory";
+			this.colCategory.ReadOnly = true;
+			// 
+			// colCategoryCertainty
+			// 
+			this.colCategoryCertainty.DataPropertyName = "CategoryCertainty";
+			this.colCategoryCertainty.HeaderText = "Certainty";
+			this.colCategoryCertainty.Name = "colCategoryCertainty";
+			this.colCategoryCertainty.ReadOnly = true;
+			// 
+			// colFileSize
+			// 
+			this.colFileSize.DataPropertyName = "FileSize";
+			this.colFileSize.HeaderText = "File Size";
+			this.colFileSize.Name = "colFileSize";
+			this.colFileSize.ReadOnly = true;
+			// 
+			// colPoints
+			// 
+			this.colPoints.DataPropertyName = "VertexCount";
+			this.colPoints.HeaderText = "Vertices";
+			this.colPoints.MinimumWidth = 8;
+			this.colPoints.Name = "colPoints";
+			this.colPoints.ReadOnly = true;
+			// 
+			// colTriangleCount
+			// 
+			this.colTriangleCount.DataPropertyName = "FaceCount";
+			this.colTriangleCount.HeaderText = "Faces";
+			this.colTriangleCount.MinimumWidth = 8;
+			this.colTriangleCount.Name = "colTriangleCount";
+			this.colTriangleCount.ReadOnly = true;
 			// 
 			// MeshBrowser
 			// 
@@ -332,9 +304,6 @@
 		private System.Windows.Forms.SaveFileDialog saveFileDialog3;
 		private System.Windows.Forms.DataGridViewImageColumn colIcon;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFileName;
-		private System.Windows.Forms.DataGridViewImageColumn colPreviewFront;
-		private System.Windows.Forms.DataGridViewImageColumn colPreviewRight;
-		private System.Windows.Forms.DataGridViewImageColumn colPreviewTop;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colCategoryCertainty;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFileSize;

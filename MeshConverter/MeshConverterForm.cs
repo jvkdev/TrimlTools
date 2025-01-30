@@ -124,10 +124,10 @@ namespace MeshConverter
 				Status = status,
 				FromPaths = browserLeft.SelectedFilePaths,
 				ToFolder = browserRight.CurrentPath,
-				Move = radioMove.Checked,
+				//Move = radioMove.Checked,
 				NameSuffix = checkAddNameSuffix.Checked ? textNameSuffix.Text : "",
 				IncludeSubFolders = checkIncludeSubFolders.Checked,
-				ImageGeneration = checkImageGeneration.Checked
+				//ImageGeneration = checkImageGeneration.Checked
 			};
 
             bool includeSubFolders = checkIncludeSubFolders.Checked;
@@ -260,7 +260,7 @@ namespace MeshConverter
 					string newFilePath = Path.Combine(toFolder,
 						Path.GetFileNameWithoutExtension(fromPath) + args.NameSuffix + Path.GetExtension(fromPath));
 
-					if (copyArgs.ImageGeneration)
+					if (args.ImageGeneration)
 					{
 						ObjFile objFile = ObjFile.Load(fromPath);
 						//Bitmap bmp = objFile.Preview(600, 600, ObjFile.PreviewDirection.Front) as Bitmap;

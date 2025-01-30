@@ -65,10 +65,10 @@
       <HintPath>..\packages\Google.Protobuf.3.19.6\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="MeshDecimator">
-      <HintPath>..\..\..\..\External\repos\MeshDecimator\MeshDecimatorTool\bin\Debug\MeshDecimator.dll</HintPath>
+      <HintPath>ReferencedDlls\MeshDecimator.dll</HintPath>
     </Reference>
     <Reference Include="MeshDecimatorTool">
-      <HintPath>..\..\..\..\External\repos\MeshDecimator\MeshDecimatorTool\bin\Debug\MeshDecimatorTool.exe</HintPath>
+      <HintPath>ReferencedDlls\MeshDecimatorTool.exe</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.Numerics, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Numerics.8.0.0\lib\net462\Microsoft.Bcl.Numerics.dll</HintPath>
