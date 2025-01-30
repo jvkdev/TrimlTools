@@ -465,7 +465,6 @@
 			this.tableLayoutPanel1.PerformLayout();
 			this.tableStatus.ResumeLayout(false);
 			this.tableStatus.PerformLayout();
-			this.panelMain.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -499,9 +498,9 @@
 		private System.Windows.Forms.Label labelStatusText;
 		private System.Windows.Forms.TableLayoutPanel tableStatus;
 		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.CheckBox checkRandomFiles;
 		private System.Windows.Forms.RadioButton radioCopy;
-		private System.Windows.Forms.RadioButton radioMove;
 	}
 }
 

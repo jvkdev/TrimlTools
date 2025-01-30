@@ -35,6 +35,8 @@
 			this.colPreviewFront = new System.Windows.Forms.DataGridViewImageColumn();
 			this.colPreviewRight = new System.Windows.Forms.DataGridViewImageColumn();
 			this.colPreviewTop = new System.Windows.Forms.DataGridViewImageColumn();
+			this.colCategory = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colCategoryCertainty = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colFileSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colPoints = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colTriangleCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -154,6 +156,20 @@
 			this.colPreviewTop.Name = "colPreviewTop";
 			this.colPreviewTop.ReadOnly = true;
 			this.colPreviewTop.Width = 128;
+			// 
+			// colCategory
+			// 
+			this.colCategory.DataPropertyName = "Category";
+			this.colCategory.HeaderText = "Category";
+			this.colCategory.Name = "colCategory";
+			this.colCategory.ReadOnly = true;
+			// 
+			// colCategoryCertainty
+			// 
+			this.colCategoryCertainty.DataPropertyName = "CategoryCertainty";
+			this.colCategoryCertainty.HeaderText = "Certainty";
+			this.colCategoryCertainty.Name = "colCategoryCertainty";
+			this.colCategoryCertainty.ReadOnly = true;
 			// 
 			// colFileSize
 			// 
@@ -319,6 +335,8 @@
 		private System.Windows.Forms.DataGridViewImageColumn colPreviewFront;
 		private System.Windows.Forms.DataGridViewImageColumn colPreviewRight;
 		private System.Windows.Forms.DataGridViewImageColumn colPreviewTop;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colCategory;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colCategoryCertainty;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colFileSize;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colPoints;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colTriangleCount;

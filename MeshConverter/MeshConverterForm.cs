@@ -14,104 +14,106 @@ using System.Windows.Forms;
 
 namespace MeshConverter
 {
-	public partial class MeshConverterForm : Form
-	{
-		private Timer uiTimer = new Timer();
+    public partial class MeshConverterForm : Form
+    {
+        private Timer uiTimer = new Timer();
 
-		public MeshConverterForm()
-		{
-			InitializeComponent();
+        public MeshConverterForm()
+        {
+            InitializeComponent();
 
-			uiTimer.Interval = 100;
-			uiTimer.Tick += UiTimer_Tick;
+            uiTimer.Interval = 100;
+            uiTimer.Tick += UiTimer_Tick;
 
-			browserLeft.SelectionChanged += BrowserLeft_SelectionChanged;
-			browserRight.SelectionChanged += BrowserRight_SelectionChanged;
-		}
+            browserLeft.SelectionChanged += BrowserLeft_SelectionChanged;
+            browserRight.SelectionChanged += BrowserRight_SelectionChanged;
+        }
 
-		private void MeshExplorer_Load(object sender, EventArgs e)
-		{
-			//BrowseToPath(textPath.Text);
-		}
+        private void MeshExplorer_Load(object sender, EventArgs e)
+        {
+            //BrowseToPath(textPath.Text);
+        }
 
-		private void UiTimer_Tick(object sender, EventArgs e)
-		{
-			if (status != null)
-			{
-				if (status.InProgress)
-				{
-					labelStatusText.Text = status.Text;
-					if (progressStatus.Value > status.MaxProgress) { progressStatus.Value = 0; }
-					progressStatus.Maximum = status.MaxProgress;
-					progressStatus.Value = status.CurrentProgress;
-				}
-				else
-				{
-					uiTimer.Stop();
-				}
-				tableStatus.Visible = status.InProgress;
-			}
-		}
+        private void UiTimer_Tick(object sender, EventArgs e)
+        {
+            if (status != null)
+            {
+                if (status.InProgress)
+                {
+                    labelStatusText.Text = status.Text;
+                    if (progressStatus.Value > status.MaxProgress) { progressStatus.Value = 0; }
+                    progressStatus.Maximum = status.MaxProgress;
+                    progressStatus.Value = Math.Min(status.CurrentProgress, progressStatus.Maximum);
+                }
+                else
+                {
+                    uiTimer.Stop();
+                }
+                tableStatus.Visible = status.InProgress;
+            }
+        }
 
-		private void textReductionTargetTriangle_TextChanged(object sender, EventArgs e)
-		{
-			if (!String.IsNullOrEmpty(textReductionTargetTriangle.Text))
-			{
-				textNameSuffix.Text = "_" + textReductionTargetTriangle.Text;
-			}
-			else
-			{
-				textNameSuffix.Text = "";
-			}
-		}
-
-
-		private void BrowserLeft_SelectionChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void BrowserRight_SelectionChanged(object sender, EventArgs e)
-		{
-			if (browserRight.MinSelectedTriangleCount > 0)
-			{
-				textReductionTargetTriangle.Text = browserRight.MinSelectedTriangleCount.ToString();
-			}
-			else
-			{
-				textReductionTargetTriangle.Text = "";
-			}
-		}
+        private void textReductionTargetTriangle_TextChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(textReductionTargetTriangle.Text))
+            {
+                textNameSuffix.Text = "_" + textReductionTargetTriangle.Text;
+            }
+            else
+            {
+                textNameSuffix.Text = "";
+            }
+        }
 
 
-		private StatusIndicator status = new StatusIndicator();
+        private void BrowserLeft_SelectionChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BrowserRight_SelectionChanged(object sender, EventArgs e)
+        {
+            if (browserRight.MinSelectedTriangleCount > 0)
+            {
+                textReductionTargetTriangle.Text = browserRight.MinSelectedTriangleCount.ToString();
+            }
+            else
+            {
+                textReductionTargetTriangle.Text = "";
+            }
+        }
+
+
+        private StatusIndicator status = new StatusIndicator();
 
 		private class MoveOrCopyArgs
 		{
 			public StatusIndicator Status { get; set; }
 
-			public string[] FromPaths { get; set; }
+            public string[] FromPaths { get; set; }
 
-			public string ToFolder { get; set; }
+            public string ToFolder { get; set; }
 
 			public bool Move { get; set; } = false;
 
 			public string NameSuffix { get; set; }
 
-			public bool IncludeSubFolders { get; set; } = false;
+            public bool IncludeSubFolders { get; set; } = false;
 
-			public int MaxFilesPerFolder { get; set; } = -1;
+            public int MaxFilesPerFolder { get; set; } = -1;
 
-			public bool RandomlySelectFilesToCopy { get; set; } = false;
+            public bool RandomlySelectFilesToCopy { get; set; } = false;
 
-			public float MaxTriangleCountOrRatio { get; set; } = -1;
-		}
+            public float MaxTriangleCountOrRatio { get; set; } = -1;
 
-		private enum CopyStage
-		{
-			Count,
-			Copy
-		}
+            public bool ImageGeneration { get; set; }
+        }
+
+        private enum CopyStage
+        {
+            Count,
+            Copy
+        }
 
 		private void btnCopy_Click(object sender, EventArgs e)
 		{
@@ -124,34 +126,35 @@ namespace MeshConverter
 				ToFolder = browserRight.CurrentPath,
 				Move = radioMove.Checked,
 				NameSuffix = checkAddNameSuffix.Checked ? textNameSuffix.Text : "",
-				IncludeSubFolders = checkIncludeSubFolders.Checked
+				IncludeSubFolders = checkIncludeSubFolders.Checked,
+				ImageGeneration = checkImageGeneration.Checked
 			};
 
-			bool includeSubFolders = checkIncludeSubFolders.Checked;
-			int maxFilesPerFolder = -1;
-			float maxTriangleCount = -1;
+            bool includeSubFolders = checkIncludeSubFolders.Checked;
+            int maxFilesPerFolder = -1;
+            float maxTriangleCount = -1;
 
-			if (checkLimitFilesPerFolder.Checked)
-			{
-				int.TryParse(textMaxFilesPerFolder.Text, out maxFilesPerFolder);
-				copyArgs.RandomlySelectFilesToCopy = checkRandomFiles.Checked;
-			}
+            if (checkLimitFilesPerFolder.Checked)
+            {
+                int.TryParse(textMaxFilesPerFolder.Text, out maxFilesPerFolder);
+                copyArgs.RandomlySelectFilesToCopy = checkRandomFiles.Checked;
+            }
 
-			if (checkMeshReduction.Checked)
-			{
-				float.TryParse(textReductionTargetTriangle.Text, out maxTriangleCount);
-				if (maxTriangleCount == 0.0f) { maxTriangleCount = 1.0f; }
-			}
+            if (checkMeshReduction.Checked)
+            {
+                float.TryParse(textReductionTargetTriangle.Text, out maxTriangleCount);
+                if (maxTriangleCount == 0.0f) { maxTriangleCount = 1.0f; }
+            }
 
-			copyArgs.MaxFilesPerFolder = maxFilesPerFolder;
-			copyArgs.MaxTriangleCountOrRatio = maxTriangleCount;
+            copyArgs.MaxFilesPerFolder = maxFilesPerFolder;
+            copyArgs.MaxTriangleCountOrRatio = maxTriangleCount;
 
-			BackgroundWorker copyWorker = new BackgroundWorker();
-			copyWorker.DoWork += CopyWorker_DoWork;
-			copyWorker.RunWorkerCompleted += CopyWorker_RunWorkerCompleted;
-			copyWorker.RunWorkerAsync(copyArgs);
-			uiTimer.Start();
-		}
+            BackgroundWorker copyWorker = new BackgroundWorker();
+            copyWorker.DoWork += CopyWorker_DoWork;
+            copyWorker.RunWorkerCompleted += CopyWorker_RunWorkerCompleted;
+            copyWorker.RunWorkerAsync(copyArgs);
+            uiTimer.Start();
+        }
 
 
 
@@ -202,14 +205,14 @@ namespace MeshConverter
 			args.Status.Text = Path.GetFileName(fromPath);
 			if (stage == CopyStage.Count) { args.Status.MaxProgress++; }
 
-			if (Directory.Exists(fromPath))
-			{
-				string newDirPath = Path.Combine(toFolder, Path.GetFileName(fromPath));
-				if (!Directory.Exists(newDirPath) && stage == CopyStage.Copy)
-				{
-					Directory.CreateDirectory(newDirPath);
-				}
-				int filesCopied = 0;
+            if (Directory.Exists(fromPath))
+            {
+                string newDirPath = Path.Combine(toFolder, Path.GetFileName(fromPath));
+                if (!Directory.Exists(newDirPath) && stage == CopyStage.Copy)
+                {
+                    Directory.CreateDirectory(newDirPath);
+                }
+                int filesCopied = 0;
 
 				List<string> originalFiles = new List<string>(Directory.GetFiles(fromPath));
 				List<string> filesToCopy = new List<string>();
@@ -231,7 +234,7 @@ namespace MeshConverter
 					}
 				}
 
-				filesToCopy.Sort();
+                filesToCopy.Sort();
 
 				foreach (string file in filesToCopy)
 				{
@@ -247,17 +250,26 @@ namespace MeshConverter
 					}
 				}
 
-			}
-			else if (File.Exists(fromPath))
-			{
-				count++;
+            }
+            else if (File.Exists(fromPath))
+            {
+                count++;
 
 				if (stage == CopyStage.Copy)
 				{
 					string newFilePath = Path.Combine(toFolder,
 						Path.GetFileNameWithoutExtension(fromPath) + args.NameSuffix + Path.GetExtension(fromPath));
 
-					if (!args.Move && args.MaxTriangleCountOrRatio > 10)
+					if (copyArgs.ImageGeneration)
+					{
+						ObjFile objFile = ObjFile.Load(fromPath);
+						//Bitmap bmp = objFile.Preview(600, 600, ObjFile.PreviewDirection.Front) as Bitmap;
+						//bmp.Save(objFile.FilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
+
+						Bitmap bmp = objFile.GetMultiAnglePreviewImage(128, 128);
+						bmp.Save(newFilePath + ".png", System.Drawing.Imaging.ImageFormat.Png);
+					}
+					else if (!args.Move && args.MaxTriangleCountOrRatio > 10)
 					{
 						MeshDecimatorTool.Commands.ReduceObjMesh(fromPath, newFilePath, args.MaxTriangleCountOrRatio);
 					}
@@ -292,24 +304,24 @@ namespace MeshConverter
 				}
 			}
 
-			return count;
-		}
+            return count;
+        }
 
-		private void checkAddNameSuffix_CheckedChanged(object sender, EventArgs e)
-		{
-			labelNameSuffix.Visible = textNameSuffix.Visible = checkAddNameSuffix.Checked;
-		}
+        private void checkAddNameSuffix_CheckedChanged(object sender, EventArgs e)
+        {
+            labelNameSuffix.Visible = textNameSuffix.Visible = checkAddNameSuffix.Checked;
+        }
 
-		private void checkMeshReduction_CheckedChanged(object sender, EventArgs e)
-		{
-			labelTriangles.Visible = textReductionTargetTriangle.Visible = checkMeshReduction.Checked;
-		}
+        private void checkMeshReduction_CheckedChanged(object sender, EventArgs e)
+        {
+            labelTriangles.Visible = textReductionTargetTriangle.Visible = checkMeshReduction.Checked;
+        }
 
-		private void checkLimitFilesPerFolder_CheckedChanged(object sender, EventArgs e)
-		{
-			labelMaxPerFolder.Visible = textMaxFilesPerFolder.Visible = checkLimitFilesPerFolder.Checked;
-			checkRandomFiles.Visible = checkLimitFilesPerFolder.Checked;
-		}
+        private void checkLimitFilesPerFolder_CheckedChanged(object sender, EventArgs e)
+        {
+            labelMaxPerFolder.Visible = textMaxFilesPerFolder.Visible = checkLimitFilesPerFolder.Checked;
+            checkRandomFiles.Visible = checkLimitFilesPerFolder.Checked;
+        }
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
