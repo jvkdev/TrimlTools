@@ -212,6 +212,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="MLModel1.mbconfig" />
+    <None Include="MLModel3.mbconfig" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -251,6 +252,18 @@
     </Compile>
     <None Include="MLModel1.mlnet">
       <DependentUpon>MLModel1.mbconfig</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup Label="MLModel3">
+    <Compile Include="MLModel3.consumption.cs">
+      <DependentUpon>MLModel3.mbconfig</DependentUpon>
+    </Compile>
+    <Compile Include="MLModel3.training.cs">
+      <DependentUpon>MLModel3.mbconfig</DependentUpon>
+    </Compile>
+    <None Include="MLModel3.mlnet">
+      <DependentUpon>MLModel3.mbconfig</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

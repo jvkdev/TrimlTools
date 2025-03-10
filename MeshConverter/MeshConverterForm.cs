@@ -127,7 +127,7 @@ namespace MeshConverter
 				//Move = radioMove.Checked,
 				NameSuffix = checkAddNameSuffix.Checked ? textNameSuffix.Text : "",
 				IncludeSubFolders = checkIncludeSubFolders.Checked,
-				//ImageGeneration = checkImageGeneration.Checked
+				ImageGeneration = checkImageGeneration.Checked
 			};
 
             bool includeSubFolders = checkIncludeSubFolders.Checked;
@@ -239,7 +239,7 @@ namespace MeshConverter
 				foreach (string file in filesToCopy)
 				{
 					count += MoveOrCopyRecursive(file, newDirPath, args, stage: stage);
-					if (++filesCopied >= args.MaxFilesPerFolder) { break; }
+					if (args.MaxFilesPerFolder > 0 && ++filesCopied >= args.MaxFilesPerFolder) { break; }
 				}
 
 				if (args.IncludeSubFolders)
