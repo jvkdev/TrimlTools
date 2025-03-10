@@ -1,4 +1,4 @@
-﻿namespace MeshConverter.Controls
+﻿namespace MeshManager.Controls
 {
     partial class MeshBrowser
     {
@@ -36,7 +36,7 @@
 			this.textNewFolder = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textPath = new System.Windows.Forms.TextBox();
-			this.browseUp = new MeshConverter.Controls.BrowseButton();
+			this.browseUp = new MeshManager.Controls.BrowseButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
 			this.saveFileDialog3 = new System.Windows.Forms.SaveFileDialog();
@@ -136,7 +136,7 @@
 			this.btnBrowse.BackColor = System.Drawing.Color.Transparent;
 			this.btnBrowse.FlatAppearance.BorderSize = 0;
 			this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnBrowse.Image = global::MeshConverter.Properties.Resources.FolderClosedBlue;
+			this.btnBrowse.Image = global::MeshManager.Properties.Resources.FolderClosedBlue;
 			this.btnBrowse.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btnBrowse.Location = new System.Drawing.Point(500, 3);
 			this.btnBrowse.Name = "btnBrowse";
@@ -197,7 +197,7 @@
 			this.browseUp.FlatAppearance.BorderSize = 0;
 			this.browseUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.browseUp.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.browseUp.Image = global::MeshConverter.Properties.Resources.FolderClosedBlue;
+			this.browseUp.Image = global::MeshManager.Properties.Resources.FolderClosedBlue;
 			this.browseUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.browseUp.Location = new System.Drawing.Point(3, 3);
 			this.browseUp.Name = "browseUp";

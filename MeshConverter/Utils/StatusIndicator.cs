@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MeshConverter.Utils
+namespace MeshManager.Utils
 {
 	public class StatusIndicator
 	{

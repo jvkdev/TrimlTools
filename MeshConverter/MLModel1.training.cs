@@ -9,7 +9,7 @@ using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Vision;
 
-namespace MeshConverter
+namespace MeshManager
 {
     public partial class MLModel1
     {

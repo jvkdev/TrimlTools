@@ -1,5 +1,5 @@
-﻿using MeshConverter.Data;
-using MeshConverter.Utils;
+﻿using MeshManager.Data;
+using MeshManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeshConverter.Controls
+namespace MeshManager.Controls
 {
 	public partial class MeshBrowser : UserControl
 	{

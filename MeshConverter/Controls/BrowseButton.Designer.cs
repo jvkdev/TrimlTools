@@ -1,4 +1,4 @@
-﻿namespace MeshConverter.Controls
+﻿namespace MeshManager.Controls
 {
     partial class BrowseButton
     {
@@ -36,7 +36,7 @@
             this.FlatAppearance.BorderSize = 0;
             this.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Image = global::MeshConverter.Properties.Resources.FolderClosedBlue;
+            this.Image = global::MeshManager.Properties.Resources.FolderClosedBlue;
             this.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.ResumeLayout(false);

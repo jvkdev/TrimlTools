@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
-namespace MeshConverter
+namespace MeshManager
 {
     public partial class MLModel1
     {

@@ -1,6 +1,6 @@
-﻿using MeshConverter.Controls;
-using MeshConverter.Data;
-using MeshConverter.Utils;
+﻿using MeshManager.Controls;
+using MeshManager.Data;
+using MeshManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,13 +12,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeshConverter
+namespace MeshManager
 {
-    public partial class MeshConverterForm : Form
+    public partial class MeshManagerForm : Form
     {
         private Timer uiTimer = new Timer();
 
-        public MeshConverterForm()
+        public MeshManagerForm()
         {
             InitializeComponent();
 

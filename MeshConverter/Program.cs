@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeshConverter
+namespace MeshManager
 {
 	internal static class Program
 	{
@@ -18,7 +18,7 @@ namespace MeshConverter
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MeshConverterForm());
+			Application.Run(new MeshManagerForm());
 		}
 
 	}

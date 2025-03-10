@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MeshConverter.Data
+namespace MeshManager.Data
 {
     public class MeshMetaData
     {

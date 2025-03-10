@@ -1,6 +1,6 @@
-﻿namespace MeshConverter
+﻿namespace MeshManager
 {
-    partial class MeshConverterForm
+    partial class MeshManagerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeshConverterForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeshManagerForm));
 			this.panelTop = new System.Windows.Forms.Panel();
 			this.panelToolbar = new System.Windows.Forms.Panel();
 			this.btnCopy = new System.Windows.Forms.Button();
@@ -38,9 +38,9 @@
 			this.labelNameSuffix = new System.Windows.Forms.Label();
 			this.labelTriangles = new System.Windows.Forms.Label();
 			this.splitLeftRight = new System.Windows.Forms.SplitContainer();
-			this.browserLeft = new MeshConverter.Controls.MeshBrowser();
+			this.browserLeft = new MeshManager.Controls.MeshBrowser();
 			this.tableRightSide = new System.Windows.Forms.TableLayoutPanel();
-			this.browserRight = new MeshConverter.Controls.MeshBrowser();
+			this.browserRight = new MeshManager.Controls.MeshBrowser();
 			this.tableMiddle = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.radioMove = new System.Windows.Forms.RadioButton();
@@ -52,6 +52,7 @@
 			this.checkAddNameSuffix = new System.Windows.Forms.CheckBox();
 			this.checkRandomFiles = new System.Windows.Forms.CheckBox();
 			this.radioCopy = new System.Windows.Forms.RadioButton();
+			this.checkImageGeneration = new System.Windows.Forms.CheckBox();
 			this.tableStatus = new System.Windows.Forms.TableLayoutPanel();
 			this.progressStatus = new System.Windows.Forms.ProgressBar();
 			this.labelStatusText = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
 			this.panelMain = new System.Windows.Forms.Panel();
 			this.panelBottom = new System.Windows.Forms.Panel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.checkImageGeneration = new System.Windows.Forms.CheckBox();
 			this.panelTop.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitLeftRight)).BeginInit();
 			this.splitLeftRight.Panel1.SuspendLayout();
@@ -373,6 +373,17 @@
 			this.radioCopy.UseVisualStyleBackColor = true;
 			this.radioCopy.CheckedChanged += new System.EventHandler(this.radioCopy_CheckedChanged);
 			// 
+			// checkImageGeneration
+			// 
+			this.checkImageGeneration.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.checkImageGeneration, 2);
+			this.checkImageGeneration.Location = new System.Drawing.Point(3, 159);
+			this.checkImageGeneration.Name = "checkImageGeneration";
+			this.checkImageGeneration.Size = new System.Drawing.Size(120, 19);
+			this.checkImageGeneration.TabIndex = 14;
+			this.checkImageGeneration.Text = "Image Generation";
+			this.checkImageGeneration.UseVisualStyleBackColor = true;
+			// 
 			// tableStatus
 			// 
 			this.tableStatus.ColumnCount = 2;
@@ -441,17 +452,6 @@
 			this.panelBottom.Size = new System.Drawing.Size(1142, 55);
 			this.panelBottom.TabIndex = 3;
 			// 
-			// checkImageGeneration
-			// 
-			this.checkImageGeneration.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.checkImageGeneration, 2);
-			this.checkImageGeneration.Location = new System.Drawing.Point(3, 159);
-			this.checkImageGeneration.Name = "checkImageGeneration";
-			this.checkImageGeneration.Size = new System.Drawing.Size(120, 19);
-			this.checkImageGeneration.TabIndex = 14;
-			this.checkImageGeneration.Text = "Image Generation";
-			this.checkImageGeneration.UseVisualStyleBackColor = true;
-			// 
 			// MeshConverterForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -465,7 +465,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "MeshConverterForm";
-			this.Text = "Mesh Commander";
+			this.Text = "Mesh Manager";
 			this.Load += new System.EventHandler(this.MeshExplorer_Load);
 			this.panelTop.ResumeLayout(false);
 			this.splitLeftRight.Panel1.ResumeLayout(false);

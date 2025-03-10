@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeshConverter.Data
+namespace MeshManager.Data
 {
 	public class ObjFace
 	{
