@@ -188,7 +188,7 @@
 			this.textPath.Name = "textPath";
 			this.textPath.Size = new System.Drawing.Size(438, 22);
 			this.textPath.TabIndex = 1;
-			this.textPath.Text = "C:\\Users\\gusla\\source\\repos\\external\\Manifold40";
+			//this.textPath.Text = "C:\\Users\\gusla\\source\\repos\\external\\Manifold40";
 			this.textPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextPath_KeyDown);
 			// 
 			// browseUp
